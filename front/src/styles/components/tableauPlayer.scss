@@ -1,0 +1,64 @@
+.center {
+  display: flex;
+  justify-content: center;
+}
+
+
+.tableau-player {
+  width: 100%;
+  border-collapse: separate; // Utilisez 'separate' pour gérer les bordures de cellules individuellement
+  border-spacing: 0; // Supprime l'espace entre les cellules
+  margin: 20px 0;
+  font-size: 0.9em;
+  font-family: sans-serif;
+  min-width: 400px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+
+  thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+  }
+
+  th, td {
+    padding: 12px 15px;
+    border-left: 1px solid #00362d; // Ajoute une bordure à gauche de chaque cellule
+    &:first-child {
+      border-left: none; // Supprime la bordure à gauche pour la première cellule
+    }
+
+
+    button {
+      padding: 5px;
+      width: auto;
+      height: auto;
+
+
+      svg {
+        width: 20px;
+        height: AUTO;
+        transition: .3s;
+      }
+
+      svg:hover {
+        color: red;
+        width: 20px;
+        height: AUTO;
+        transition: .3s;
+
+      }
+    }
+  }
+
+  tbody tr {
+    &:nth-of-type(even) {
+      background-color: #00c596; // Nouvelle couleur pour les lignes paires
+    }
+
+    &:not(:last-child) {
+      td {
+        border-bottom: 1px solid #00362d; // Ajoute une bordure en bas de chaque cellule sauf la dernière
+      }
+    }
+  }
+}
