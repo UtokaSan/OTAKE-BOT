@@ -2,9 +2,9 @@ const { Client, Events, GatewayIntentBits } = require('discord.js');
 const { token } = require('./config.json');
 const { pingCommand, gameQuizz, gameGacha } = require('./bot.js');
 const randomChar = require('anime-character-random');
-const { gameQuizzCommand } = require('./game_quizz.js');
+const { gameQuizzCommand } = require('./games/game_quizz.js');
+const { executeGacha } = require('./games/game_gacha.js');
 
-// Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent ] });
 
 client.once(Events.ClientReady, readyClient => {
@@ -25,9 +25,8 @@ client.on(Events.InteractionCreate, async interaction => {
             await gameQuizzCommand(interaction);
             break;
         case gameGacha.name:
-            await interaction.reply("Game gacha started!");
+            await executeGacha(interaction);
             break;
-
     }
 });
 
