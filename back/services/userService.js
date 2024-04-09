@@ -25,10 +25,12 @@ const readUserById = async (id) => {
 
 const deleteUser = async (id) => {
     const client = Database.getInstance().getClient();
-    // delete user with id
     try {
-        const results = await client.query(`DELETE FROM "user" WHERE id = $1`, [id]);
+        const results = await client.query(`DELETE FROM "user" WHERE id = $1 RETURNING *`, [id]);
         console.log('The User has been deleted');
+        if (results.rows.length === 0) {
+            return undefined;
+        }
         return results.rows;
     } catch (err) {
         console.error("error executing query:", err);
