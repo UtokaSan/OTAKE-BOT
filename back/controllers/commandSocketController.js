@@ -4,6 +4,9 @@ import { createUser, deleteUser, readUsers } from "../services/userService.js";
 const commandManagement = (command, ws, message) => {
     console.log('WebSocket client connected');
     switch (command) {
+        case 'ping':
+            ws.send("pong");
+            break;
         case 'getUsers':
             getAllUsersWS(ws);
             break;
