@@ -10,8 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "anime-character-random": "^1.0.14",
+    "@mateoaranda/jikanjs": "^1.2.4",
     "discord.js": "^14.14.1",
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "pagination.djs": "^4.0.14",
+    "pg": "^8.11.5"
   }
 }

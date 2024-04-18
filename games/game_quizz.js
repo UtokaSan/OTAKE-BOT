@@ -1,5 +1,4 @@
-const randomChar = require("anime-character-random");
-
+// REFAIRE LE CODE
 async function gameQuizzCommand(interaction) {
     await interaction.reply("Game quizz started!");
     const randomCharacter = await randomChar.GetChar();
@@ -18,23 +17,6 @@ async function gameQuizzCommand(interaction) {
 
 async function verificationAnswer(interaction, input, name) {
     let isCorrect = false;
-    if (name.includes(',')) {
-        const test = name.split(',');
-        for (const part of test) {
-            if (part.trim().toLowerCase() === input) {
-                await interaction.followUp("Correct answer!");
-                isCorrect = true;
-            }
-        }
-    } else {
-        if (name.trim().toLowerCase() === input.toLowerCase()) {
-            await interaction.followUp("Correct answer!");
-            isCorrect = true;
-        }
-    }
-    if (!isCorrect) {
-        await interaction.followUp("You lose! The character was " + name);
-    }
 }
 
 module.exports = {
