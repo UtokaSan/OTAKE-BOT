@@ -1,10 +1,10 @@
 const { Client, Events, GatewayIntentBits } = require('discord.js');
 const { token } = require('./config.json');
-const { pingCommand, gameQuizz, gameGacha } = require('./bot.js');
+const { pingCommand, gameQuizz, gameGacha } = require('./commands.js');
 const { gameQuizzCommand } = require('./games/game_quizz.js');
 const { executeGacha } = require('./games/gacha/game_gacha.js');
 const {addUserInDb, addAllUserInDb} = require("./database/manage_db");
-const {dataProfile} = require("./bot");
+const {dataProfile} = require("./commands");
 const {executeInfoProfile} = require("./games/gacha/player_gacha");
 const {executeShopGacha} = require("./games/gacha/shop_gacha");
 const client = new Client({ intents: [
