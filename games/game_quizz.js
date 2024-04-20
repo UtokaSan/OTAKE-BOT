@@ -4,7 +4,7 @@ const {EmbedBuilder} = require("discord.js");
 async function gameQuizzCommand(interaction) {
     await interaction.reply("Game quizz started!");
     let randomCharacter = await randomCharacterAnime();
-    nameCharacter = randomCharacter.data.name;
+    let nameCharacter = randomCharacter.data.name;
     image = randomCharacter.data.images.jpg.image_url;
     const message = new EmbedBuilder()
         .setTitle("Who is this character?")

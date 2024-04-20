@@ -1,4 +1,4 @@
-const {pgClient} = require("./database_config");
+const {pgClient} = require("../database_config");
 
 
 // Faire un update de la table users pour ajouter un utilisateur

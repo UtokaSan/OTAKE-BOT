@@ -61,21 +61,11 @@ async function buyCharacter(interaction) {
             price: item.price
         });
     });
-    const gold = await takeGold(userId)
-    let user = new User(userId, gold, []);
+    let user = new User(userId, []);
+    console.log(user.money);
     let shopClass = new Shop();
     if (await shopClass.buyCard(interaction, user, cardId)) {
         await interaction.reply("Card bought successfully");
-    }
-}
-
-async function takeGold(userId) {
-try {
-        const res = await pgClient.query("SELECT money FROM users WHERE discord_id = $1", [userId]);
-        const money = res.rows[0].money;
-        return money;
-    } catch (err) {
-        console.log(err);
     }
 }
 
