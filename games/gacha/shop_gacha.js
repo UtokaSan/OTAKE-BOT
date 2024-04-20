@@ -1,7 +1,7 @@
 const {pgClient} = require("../../database/database_config");
 const {Shop} = require("./class/Shop");
 const {User} = require("./class/User");
-
+const {EmbedBuilder} = require("discord.js");
 
 
 async function executeShopGacha(interaction) {
@@ -12,6 +12,9 @@ async function executeShopGacha(interaction) {
             break;
         case "sell":
             await sellCharacter(interaction);
+            break;
+        case "show":
+            await showShop(interaction);
             break;
     }
 }
@@ -30,10 +33,23 @@ async function sellCharacter(interaction) {
     const gold = await takeGold(userId)
     let user = new User(userId, gold , cards);
     let shop = new Shop();
-    await shop.sellCard(user, cardId)
-    await shop.showShop();
-    await interaction.reply("Card sold successfully");
+    if (await shop.sellCard(user, cardId)){
+        interaction.reply("You don't have enough money to buy this card");
+    }
 }
+async function showShop(interaction) {
+    let shop = new Shop();
+    let shopList = await shop.showShop();
+    let message = new EmbedBuilder;
+    shopList.forEach(item => {
+        message.addFields({
+            name:`Card ${item.id}`, value:`Name: ${item.name}\nPrice: ${item.price}`
+        });
+    });
+    await interaction.reply({embeds: [message]});
+
+}
+
 async function buyCharacter(interaction) {
     const userId = interaction.user.id;
     const cardId = interaction.options.getInteger("id");
@@ -48,8 +64,9 @@ async function buyCharacter(interaction) {
     const gold = await takeGold(userId)
     let user = new User(userId, gold, []);
     let shopClass = new Shop();
-    await shopClass.buyCard(user, cardId);
-    await interaction.reply("Card bought successfully");
+    if (await shopClass.buyCard(interaction, user, cardId)) {
+        await interaction.reply("Card bought successfully");
+    }
 }
 
 async function takeGold(userId) {

@@ -23,6 +23,16 @@ class User {
     addCard(card) {
         this._cards.push(card);
     }
+
+    get money() {
+        return this._money;
+    }
+    get cards() {
+        return this._cards;
+    }
+    set money(value) {
+        this._money = value;
+    }
 }
 
 module.exports = {
