@@ -19,17 +19,13 @@ const getAllUser = async (req, res) => {
 }
 
 const registerUser = (req, res) => {
-    const pseudo = req.body.pseudo;
-    const argent = req.body.argent;
+    let userValue = req.body;
+    console.log(userValue);
 
     //TODO :: Change Sens of the condition
-    createUser(pseudo, argent).then(({id}) => {
-        readUserById(id).then((user) => {
-            res.status(201).send(user);
-        }).catch((err) => {
-            console.error("error executing query:", err);
-            res.status(500).send({message: "Internal Server Error"});
-        });
+    createUser(userValue).then((user) => {
+        console.log(user);
+        res.status(201).send(user);
     }).catch((err) => {
         console.error("error executing query:", err);
         res.status(500).send({message: "Internal Server Error"});

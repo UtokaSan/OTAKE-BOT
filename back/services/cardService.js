@@ -4,7 +4,7 @@ const readAllCard = async () => {
     const client = Database.getInstance().getClient();
 
     try {
-        const results = await client.query(`SELECT * FROM "card" ORDER BY id ASC`);
+        const results = await client.query(`SELECT * FROM "cards" ORDER BY id ASC`);
         console.log('Requête GET reçue');
         console.log(results.rows);
         return results.rows;
@@ -17,7 +17,7 @@ const readCardById = async (id) => {
     const client = Database.getInstance().getClient();
 
     try {
-        const results = await client.query(`SELECT * FROM "card" WHERE id = ${id}`);
+        const results = await client.query(`SELECT * FROM "cards" WHERE id = ${id}`);
         console.log('Requête GET reçue');
         console.log(results.rows);
         return results.rows;
@@ -30,8 +30,8 @@ const createCard = async (card) => {
     const client = Database.getInstance().getClient();
 
     try {
-        await client.query(`INSERT INTO "card" (name, attack, pv, rarity) VALUES ('${card.name}', '${card.attack}', '${card.pv}', '${card.rarity}')`);
-        console.log('Requête POST reçue');
+        const result = await client.query(`INSERT INTO "cards" (name, attack, pv, price, rarity, image) VALUES ('${card.name}', '${card.attack}', '${card.pv}','${card.price}', '${card.rarity}', '${card.image}') RETURNING *`);
+        return result.rows[0];
     } catch (err) {
         console.error("error executing query:", err);
     }
@@ -41,7 +41,7 @@ const updateCard = async (id, params) => {
     const client = Database.getInstance().getClient();
 
     try {
-        const query = `UPDATE "card" SET ${params} WHERE id = ${id}`;
+        const query = `UPDATE "cards" SET ${params} WHERE id = ${id}`;
         await client.query(query);
         console.log('Requête PATCH reçue');
     } catch (err) {
@@ -52,8 +52,10 @@ const updateCard = async (id, params) => {
 const removeCard = async (id) => {
     const client = Database.getInstance().getClient();
     try {
-        await client.query(`DELETE FROM "card" WHERE id = ${id}`);
+        const rst = await client.query(`DELETE FROM "cards" WHERE id = ${id} RETURNING *`);
+        if (rst === undefined) return
         console.log('Requête DELETE reçue');
+        return rst.rows[0]
     } catch (err) {
         console.error("error executing query:", err);
     }

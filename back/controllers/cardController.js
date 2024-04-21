@@ -39,8 +39,14 @@ const createCardController = (req, res) => {
         return;
     }
 
-    createCard(req.body).then(() => {
-        res.status(201).send({message: "Card created"});
+    createCard(req.body).then((rst) => {
+        console.log("rst :: ", rst)
+        if (rst === {} || rst === undefined) {
+            res.status(500).send({message: "Error when put data in db"})
+            return;
+        }
+        res.status(201).json(rst);
+
     }).catch((err) => {
         console.error("error executing query:", err);
         res.status(500).send({message: "Internal Server Error"});
@@ -76,7 +82,12 @@ const updateCardController = (req, res) => {
 const deleteCardController = (req, res) => {
     const id = req.params.id;
 
-    removeCard(id).then(() => {
+    removeCard(id).then((rst) => {
+        if (rst === undefined) {
+            res.status(400).send({message: "The card cannot be deleted"});
+            return
+        }
+        console.log(rst)
         res.status(200).send({message: "Card deleted"});
     }).catch((err) => {
         console.error("error executing query:", err);

@@ -4,7 +4,7 @@ const readUsers = async () => {
     const client = Database.getInstance().getClient();
 
     try {
-        const results = await client.query(`SELECT * FROM "user" ORDER BY id ASC`);
+        const results = await client.query(`SELECT * FROM "users" ORDER BY pseudo ASC`);
         console.log('Requête GET reçue');
         console.log(results.rows);
         return results.rows;
@@ -13,10 +13,10 @@ const readUsers = async () => {
     }
 }
 
-const readUserById = async (id) => {
+const readUserById = async (discord_id) => {
     const client = Database.getInstance().getClient();
     try {
-        const results = await client.query(`SELECT * FROM "user" WHERE id = $1`, [id]);
+        const results = await client.query(`SELECT * FROM "users" WHERE discord_id = $1`, [discord_id]);
         return results.rows[0];
     } catch (err) {
         console.error("error executing query:", err);
@@ -26,7 +26,7 @@ const readUserById = async (id) => {
 const deleteUser = async (id) => {
     const client = Database.getInstance().getClient();
     try {
-        const results = await client.query(`DELETE FROM "user" WHERE id = $1 RETURNING *`, [id]);
+        const results = await client.query(`DELETE FROM "users" WHERE discord_id = $1 RETURNING *`, [id]);
         console.log('The User has been deleted');
         if (results.rows.length === 0) {
             return undefined;
@@ -37,16 +37,16 @@ const deleteUser = async (id) => {
     }
 }
 
-const createUser = async (pseudo, argent) => {
+const createUser = async (user) => {
 
     console.log("pseudo, argent")
-    console.log(pseudo, argent)
+    console.log(user.discord_id, user.pseudo, user.money)
 
     const client = Database.getInstance().getClient();
 
     try {
-        const queryText = `INSERT INTO "user"(pseudo, argent) VALUES ($1, $2) RETURNING id`;
-        const values = [pseudo, argent];
+        const queryText = `INSERT INTO "users"(discord_id, pseudo, money) VALUES ($1, $2, $3) RETURNING *`;
+        const values = [user.discord_id, user.pseudo, user.money];
         const results = await client.query(queryText, values);
 
         return await results.rows[0];

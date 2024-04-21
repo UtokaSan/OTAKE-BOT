@@ -1,10 +1,11 @@
 import express from 'express';
 import { routerUser } from "./routers/userRouter.js";
 import cors from 'cors';
-import { WebSocketServer } from 'ws';
-import { WebSocketRouter } from "./routers/webSocket.js";
 import { routerMoney } from "./routers/moneyRouter.js";
 import { routerCard } from "./routers/cardRouter.js";
+import { Server } from "socket.io";
+import Database from "./db/db.js";
+
 
 const app = express();
 const port = 3000;
@@ -26,10 +27,29 @@ app.post('/data', (req, res) => {
     res.send('Données reçues avec succès !');
 });
 
+const client = Database.getInstance().getClient();
+
 const server = app.listen(port, () => {
     console.log(`Serveur démarré sur le port ${port}`);
 });
 
-const wss = new WebSocketServer({server}); // Modification ici
+const io = new Server(server);
 
-wss.on('connection', WebSocketRouter);
+io.on('connection', (socket) => {
+    console.log('Un client est connecté');
+
+    socket.on('ping', (data) => {
+        console.log('Événement reçu:', data);
+    });
+
+    socket.on('present', (data) => {
+        console.log('present :', data);
+    });
+
+    socket.on('disconnect', () => {
+        console.log("Un client vien de se déconnecté"); // Affiche un message lorsque le client se déconnecte
+    });
+
+    socket.emit('bienvenue', {message: 'Bienvenue sur le serveur Socket.IO!'});
+});
+

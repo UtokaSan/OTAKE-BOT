@@ -5,7 +5,7 @@ const readMoneyById = async (id) => {
     console.log(id);
     try {
         const query = {
-            text: 'SELECT * FROM "user" WHERE id = $1',
+            text: 'SELECT * FROM "users" WHERE id = $1',
             values: [id],
         };
 
@@ -21,7 +21,7 @@ const updateMoneyById = async (id, money) => {
     const client = Database.getInstance().getClient();
     try {
         const query = {
-            text: 'UPDATE "user" SET argent = argent + $1 WHERE id = $2 RETURNING *',
+            text: 'UPDATE "users" SET argent = argent + $1 WHERE id = $2 RETURNING *',
             values: [money, id],
         };
         const results = await client.query(query);
