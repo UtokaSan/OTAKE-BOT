@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const getAllUser = async () => {
+const getAllCard = async () => {
     // console.log("email : ", email, "password : ", password);
     try {
         console.log("print")
-        const response = await axios.get("http://localhost:3000/user/");
+        const response = await axios.get("http://localhost:3000/card/");
         await console.log(response)
         await console.log("response : ")
         await console.log(response.data)
@@ -14,18 +14,20 @@ const getAllUser = async () => {
     }
 }
 
-
-const deleteUser = async (id) => {
+const deleteCard = async (id) => {
+    // console.log("email : ", email, "password : ", password);
     try {
-        const response = await axios.delete(`http://localhost:3001/user/${id}`);
-        await console.log("delete response")
+        console.log("print")
+        const response = await axios.delete(`http://localhost:3000/card/${id}`);
+        await console.log(response.data)
         return response.data;
     } catch (error) {
         throw error;
     }
 }
 
+
 export {
-    getAllUser,
-    deleteUser
+    getAllCard,
+    deleteCard
 };

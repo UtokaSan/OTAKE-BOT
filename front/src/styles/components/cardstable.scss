@@ -3,7 +3,7 @@
   justify-content: center;
 }
 
-#tableau-player {
+#table__cards {
   //border-collapse: separate;
   border-spacing: 0; // Supprime l'espace entre les cellules
   margin: 20px auto;
@@ -30,13 +30,13 @@
         padding: 12px 15px;
       }
 
-      #tr__deleteUser {
+      #tr__deleteCard {
         text-align: center;
       }
     }
   }
 
-  #id_table {
+  .td_rowcard__id {
     display: flex;
     align-items: center;
   }
@@ -58,14 +58,14 @@
       color: #1a1a1a;
     }
 
-    .tableau-player__avatarImg {
+    .tableau_card__image {
       width: 50px;
       height: 50px;
       margin-right: 1em;
     }
 
 
-    button {
+    .button__deletecard {
       padding: 5px;
       width: auto;
       height: auto;
@@ -78,6 +78,25 @@
 
       svg:hover {
         color: red;
+        width: 20px;
+        height: AUTO;
+        transition: .3s;
+      }
+    }
+
+    .button__editcard {
+      padding: 5px;
+      width: auto;
+      height: auto;
+
+      svg {
+        width: 20px;
+        height: AUTO;
+        transition: .3s;
+      }
+
+      svg:hover {
+        color: gold;
         width: 20px;
         height: AUTO;
         transition: .3s;
@@ -101,10 +120,40 @@
     border-bottom: 1px solid black;
   }
 
-  tbody {
 
+  tbody {
+    .Admin {
+      background-color: #ff8a8a;
+
+      &:nth-of-type(even) {
+        background-color: #ff5454; // Nouvelle couleur pour les lignes paires
+      }
+
+    }
+
+    .Legendary {
+      background-color: #ffed8a;
+
+      &:nth-of-type(even) {
+        background-color: #ffe137; // Nouvelle couleur pour les lignes paires
+      }
+
+    }
+
+    .Common {
+      background-color: #e6e6e6; // Nouvelle couleur pour les lignes paires
+
+      &:nth-of-type(even) {
+        background-color: #bdbdbd;
+      }
+
+    }
 
     tr {
+      &:nth-of-type(even) {
+        background-color: #00c596; // Nouvelle couleur pour les lignes paires
+      }
+
       &:not(:last-child) {
         td {
           border-bottom: 1px solid #00362d; // Ajoute une bordure en bas de chaque cellule sauf la dernière
@@ -113,3 +162,4 @@
     }
   }
 }
+
