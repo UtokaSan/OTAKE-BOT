@@ -5,9 +5,24 @@ const getAllCard = async () => {
     try {
         console.log("print")
         const response = await axios.get("http://localhost:3000/card/");
-        await console.log(response)
         await console.log("response : ")
         await console.log(response.data)
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+const editCard = async (id, name, rarity, Attack, Life) => {
+    try {
+        console.log("print");
+        const response = await axios.patch(`http://localhost:3000/card/${id}`, {
+            "name": name,
+            "rarity": rarity,
+            "attack": Attack,
+            "pv": Life
+        });
+        await console.log(response.data);
         return response.data;
     } catch (error) {
         throw error;
@@ -17,17 +32,17 @@ const getAllCard = async () => {
 const deleteCard = async (id) => {
     // console.log("email : ", email, "password : ", password);
     try {
-        console.log("print")
+        console.log("print");
         const response = await axios.delete(`http://localhost:3000/card/${id}`);
-        await console.log(response.data)
+        await console.log(response.data);
         return response.data;
     } catch (error) {
         throw error;
     }
 }
 
-
 export {
     getAllCard,
+    editCard,
     deleteCard
 };

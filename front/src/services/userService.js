@@ -14,6 +14,18 @@ const getAllUser = async () => {
     }
 }
 
+const getOneUser = async (id) => {
+    // console.log("email : ", email, "password : ", password);
+    try {
+        const response = await axios.get(`http://localhost:3000/user/${id}`);
+        await console.log("response : ")
+        await console.log(response.data)
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 
 const deleteUser = async (id) => {
     try {

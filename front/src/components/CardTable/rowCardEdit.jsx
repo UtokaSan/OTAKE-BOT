@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { deleteCard, getAllCard } from "../../services/cardService.js";
+import {
+    deleteCard,
+    editCard,
+    getAllCard
+} from "../../services/cardService.js";
 // import img from '../assets/img.png';
 // import '../styles/style.css'
 
@@ -33,8 +37,13 @@ function RowCard({card, reload, setToggleChange, index}) {
         setCardLife(event.target.value);
     }
 
-    const onBlur = () => {
-
+    const handleBlur = () => {
+        editCard(card.id, cardName, cardRarity, cardAttack, cardLife).then(rst => {
+            console.log("rst : ", rst);
+            reload();
+        }).catch(err => {
+            console.log("error : ", err)
+        });
     }
     return (
         <tr key={card.id} className={card.rarity}>
@@ -59,19 +68,24 @@ function RowCard({card, reload, setToggleChange, index}) {
                        size={cardRarity.length || 1}
                        value={cardRarity}
                        onChange={ChangeRarityValue}
+                       onBlur={handleBlur} // to save when it loses focus
+
                 />
             </td>
             <td>
                 <input type="text"
                        size={cardAttack.toString().length || 1}
                        onChange={ChangeAttackValue}
-                       value={cardAttack}/>
+                       value={cardAttack}
+                       onBlur={handleBlur} // to save when it loses focus
+                />
+
             </td>
             <td>
                 <input type="text"
                        size={cardLife.toString().length || 1}
                        onChange={ChangeLifeValue}
-
+                       onBlur={handleBlur} // to save when it loses focus
                        value={cardLife}/>
             </td>
             <td>
