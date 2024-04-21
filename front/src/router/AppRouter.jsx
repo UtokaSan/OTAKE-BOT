@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import HomePage from "../pages/HomePage.jsx";
 import NavBar from "../components/navBar.jsx";
 import CardPage from "../pages/CardPage.jsx";
-import Utilisateur from "../pages/Utilisateur.jsx";
+import UtilisateurPage from "../pages/UtilisateurPage.jsx";
 
 
 const AppRouter = createBrowserRouter([
@@ -31,7 +31,7 @@ const AppRouter = createBrowserRouter([
         path: "/user/:id",
         element: <>
             <NavBar/>
-            <Utilisateur/>
+            <UtilisateurPage/>
         </>
     }
 ])

@@ -7,10 +7,10 @@ function navBar() {
     return (
         <>
             <nav id="navBar">
-                <a href="/" className="navbar__logo">DEDEDE</a>
+                <a href="/" className="navbar__logo">OTAKE</a>
                 <menu id="navbar__menu">
-                    <Link to="/users">Utilisateurs</Link>
-                    <Link to="/cards">Cartes</Link>
+                    <Link to="/users">Users</Link>
+                    <Link to="/cards">Cards</Link>
                 </menu>
             </nav>
         </>

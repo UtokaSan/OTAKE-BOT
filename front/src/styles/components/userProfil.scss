@@ -1,0 +1,24 @@
+.underline {
+  text-decoration: underline;
+}
+
+#div_usercomponents__firstrow {
+  display: flex;
+  gap: 2.5em;
+
+  #container_userinformation {
+    h2 {
+      margin: 0;
+      font-size: 2em;
+    }
+  }
+}
+
+#div_usercomponents__secondrow {
+  h2 {
+    margin-top: 25px;
+    font-size: 2em;
+  }
+
+  
+}

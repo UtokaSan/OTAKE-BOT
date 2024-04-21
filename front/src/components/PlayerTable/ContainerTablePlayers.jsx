@@ -1,5 +1,5 @@
 import React from 'react';
-import JoueursTableau from './PlayerTable/PlayerTable.jsx';
+import JoueursTableau from './PlayerTable.jsx';
 
 function ContainerTablePlayers() {
     return (

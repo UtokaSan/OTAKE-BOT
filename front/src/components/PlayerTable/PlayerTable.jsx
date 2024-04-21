@@ -55,7 +55,6 @@ function TablePlayers() {
                                 </td>
                                 <td>{player.pseudo}</td>
                                 <td>{player.money}</td>
-
                                 <td>
                                     <p className="online">Online</p>
                                 </td>

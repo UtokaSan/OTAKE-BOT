@@ -1,6 +1,7 @@
 import React from 'react'
 import '../styles/pages/homePage.scss';
-import ContainerTableauPlayer from "../components/ContainerTablePlayers.jsx";
+import ContainerTableauPlayer
+    from "../components/PlayerTable/ContainerTablePlayers.jsx";
 
 function Name() {
     console.log("Home")
