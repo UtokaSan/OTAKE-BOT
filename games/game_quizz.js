@@ -1,25 +1,38 @@
 const jikan = require("@mateoaranda/jikanjs");
 const {EmbedBuilder} = require("discord.js");
+const {User} = require("./gacha/class/User");
 
 async function gameQuizzCommand(interaction) {
-    await interaction.reply("Game quizz started!");
-    let randomCharacter = await randomCharacterAnime();
-    let nameCharacter = randomCharacter.data.name;
-    image = randomCharacter.data.images.jpg.image_url;
-    const message = new EmbedBuilder()
-        .setTitle("Who is this character?")
-        .setImage(image)
-        .setFields({name: "Indice", value: nameCharacter.replace(/[a-z]/g, "_")})
-        .setFooter({ text: "You have 40 seconds to answer" });
-    await interaction.followUp({ embeds: [message] });
-    const filter = (message) => message.author.id === interaction.user.id;
-    const collector = interaction.channel.createMessageCollector({ filter, time: 40000 });
+    let user = new User(interaction.user.id);
 
-    collector.on('collect', async message => {
-        const answer = message.content.toLowerCase();
-        await verificationAnswer(interaction, answer, nameCharacter);
-        collector.stop();
-    });
+    let cooldown = await user.takeCooldown();
+    if (cooldown.hours <= 0 && cooldown.minutes <= 0 && cooldown.seconds <= 0) {
+        await interaction.reply("Game quizz started!");
+        let randomCharacter = await randomCharacterAnime();
+        let nameCharacter = randomCharacter.data.name;
+        image = randomCharacter.data.images.jpg.image_url;
+        const message = new EmbedBuilder()
+            .setTitle("Who is this character?")
+            .setImage(image)
+            .setFields({name: "Indice", value: nameCharacter.replace(/[a-z]/g, "_")})
+            .setFooter({ text: "You have 40 seconds to answer" });
+        await interaction.followUp({ embeds: [message] });
+        const filter = (message) => message.author.id === interaction.user.id;
+        const collector = interaction.channel.createMessageCollector({ filter, time: 40000 });
+        console.log(nameCharacter)
+        collector.on('collect', async message => {
+            const answer = message.content.toLowerCase();
+            if (await verificationAnswer(interaction, answer, nameCharacter)) {
+                user._money += 100;
+                await user.updateMoney()
+            }
+            await user.addCooldown();
+            collector.stop();
+        });
+    } else {
+        const {hours, minutes, seconds} = await user.takeCooldown();
+        await interaction.reply(`You have to wait ${hours} hours, ${minutes} minutes, ${seconds} secondes to play again`);
+    }
 }
 
 async function randomCharacterAnime() {
@@ -39,15 +52,19 @@ async function randomCharacterAnime() {
     }
 }
 
+// Verification of the answer
+// If the answer is correct, the user wins 100 🪙
 async function verificationAnswer(interaction, input, name) {
     let isCorrect = false;
     if (input === name.toLowerCase()) {
         isCorrect = true;
     }
     if (isCorrect) {
-        await interaction.followUp("Congratulations! You have found the right answer!");
+        await interaction.followUp("Congratulations! You have found the right answer!\nYou won 100 🪙");
+        return true;
     } else {
         await interaction.followUp("Sorry, you didn't find the right answer, the correct answer was: " + name);
+        return false;
     }
 }
 

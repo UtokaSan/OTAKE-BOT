@@ -13,6 +13,9 @@ async function executeInfoProfile(interaction) {
            case "show-gold":
             await showGold(interaction);
             break;
+        case "show-profile":
+            await showProfile(interaction);
+            break;
     }
 }
 
@@ -26,6 +29,31 @@ async function showGold(interaction) {
     } catch (err) {
         console.log(err);
     }
+}
+
+async function showProfile(interaction) {
+    const userId = interaction.user.id;
+    try {
+        const res = await pgClient.query("SELECT * FROM users WHERE discord_id = $1", [userId]);
+        const user = res.rows[0];
+        const embed = new EmbedBuilder()
+            .setTitle(`Profile of ${interaction.user.username}`)
+            .setThumbnail(user.avatar)
+            .addFields({
+                name: "Pseudo",
+                value: user.pseudo
+            }, {
+                name: "Elo",
+                value: user.elo.toString()
+            }, {
+                name: "Money",
+                value: user.money.toString() + " 🪙"
+            });
+        await interaction.reply({embeds: [embed]});
+    } catch (err) {
+        console.log(err);
+    }
+
 }
 
 async function showCollection(interaction) {

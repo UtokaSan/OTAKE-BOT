@@ -3,10 +3,12 @@ const { token } = require('./config.json');
 const { pingCommand, gameQuizz, gameGacha } = require('./commands.js');
 const { gameQuizzCommand } = require('./games/game_quizz.js');
 const { executeGacha } = require('./games/gacha/game_gacha.js');
-const {addUserInDb, addAllUserInDb} = require("./database/models/manage_db");
+const {addUserInDb, addAllUserInDb} = require("./database/models/user_model");
 const {dataProfile} = require("./commands");
 const {executeInfoProfile} = require("./games/gacha/player_gacha");
 const {executeShopGacha} = require("./games/gacha/shop_gacha");
+const {addAllCooldownUserInDb, addCooldownUserInDb} = require("./database/models/cooldown_model");
+
 const client = new Client({ intents: [
     GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMembers
 ]});
@@ -40,12 +42,12 @@ client.on(Events.InteractionCreate, async interaction => {
 });
 client.on('ready', async (client) => {
     await addAllUserInDb(client);
+    await addAllCooldownUserInDb(client);
 });
 
 client.on('guildMemberAdd', async (member) => {
     await addUserInDb(member);
-    console.log('User added in db');
+    await addCooldownUserInDb(member);
 })
 
-// Log in to Discord with your client's token
 client.login(token);

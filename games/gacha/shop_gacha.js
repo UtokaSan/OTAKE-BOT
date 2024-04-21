@@ -30,10 +30,9 @@ async function sellCharacter(interaction) {
             price: card.price
         });
     });
-    const gold = await takeGold(userId)
-    let user = new User(userId, gold , cards);
+    let user = new User(userId, cards);
     let shop = new Shop();
-    if (await shop.sellCard(user, cardId)){
+    if (await shop.sellCard(interaction, user, cardId)){
         interaction.reply("You don't have enough money to buy this card");
     }
 }
