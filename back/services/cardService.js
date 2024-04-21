@@ -41,9 +41,10 @@ const updateCard = async (id, params) => {
     const client = Database.getInstance().getClient();
 
     try {
-        const query = `UPDATE "cards" SET ${params} WHERE id = ${id}`;
-        await client.query(query);
+        const query = `UPDATE "cards" SET ${params} WHERE id = ${id} RETURNING *`;
+        const rst = await client.query(query);
         console.log('Requête PATCH reçue');
+        return rst.rows[0];
     } catch (err) {
         console.error("error executing query:", err);
     }

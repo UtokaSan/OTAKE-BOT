@@ -71,8 +71,8 @@ const updateCardController = (req, res) => {
 
     const paramsToChange = changeValue.join(', ');
 
-    updateCard(id, paramsToChange).then(() => {
-        res.status(200).send({message: "Card updated"});
+    updateCard(id, paramsToChange).then((rst) => {
+        res.status(200).send(rst);
     }).catch((err) => {
         console.error("error executing query:", err);
         res.status(500).send({message: "Internal Server Error"});
