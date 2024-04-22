@@ -9,14 +9,15 @@ import {
 // import img from '../assets/img.png';
 // import '../styles/style.css'
 
-function RowCard({card, reload, setToggleChange, index}) {
+function RowCard({card, reload, setToggleChange}) {
     const [cardName, setCardName] = useState(card.name);
     const [cardRarity, setCardRarity] = useState(card.rarity);
     const [cardAttack, setCardAttack] = useState(card.attack);
     const [cardLife, setCardLife] = useState(card.pv);
+    const [cardOwner, setCardOwner] = useState(card.owner_id || 'null');
 
     const removeItem = async (id) => {
-        const rst = await deleteCard(id);
+        await deleteCard(id);
         const cardsData = await getAllCard();
         reload(cardsData);
     }
@@ -37,8 +38,12 @@ function RowCard({card, reload, setToggleChange, index}) {
         setCardLife(event.target.value);
     }
 
+    const ChangeOwnerIdValue = (event) => {
+        setCardOwner(event.target.value);
+    }
+
     const handleBlur = () => {
-        editCard(card.id, cardName, cardRarity, cardAttack, cardLife).then(rst => {
+        editCard(card.id, cardName, cardRarity, cardAttack, cardLife, cardOwner).then(rst => {
             console.log("rst : ", rst);
             reload();
         }).catch(err => {
@@ -87,6 +92,13 @@ function RowCard({card, reload, setToggleChange, index}) {
                        onChange={ChangeLifeValue}
                        onBlur={handleBlur} // to save when it loses focus
                        value={cardLife}/>
+            </td>
+            <td>
+                <input type="text"
+                       size={cardOwner.toString().length || 1}
+                       onChange={ChangeOwnerIdValue}
+                       onBlur={handleBlur} // to save when it loses focus
+                       value={cardOwner}/>
             </td>
             <td>
                 <button className="button__deletecard"

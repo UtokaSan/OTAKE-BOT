@@ -26,6 +26,20 @@ const readCardById = async (id) => {
     }
 }
 
+const readCardByIdUser = async (id) => {
+    const client = Database.getInstance().getClient();
+
+    console.log("id readCardByIdUser : ", id, typeof id)
+    try {
+        const results = await client.query(`SELECT * FROM "cards" WHERE owner_id = CAST($1 AS VARCHAR);`, [id]);
+        console.log('Requête GET reçue');
+        console.log(results.rows);
+        return results.rows;
+    } catch (err) {
+        console.error("error executing query:", err);
+    }
+}
+
 const createCard = async (card) => {
     const client = Database.getInstance().getClient();
 
@@ -65,6 +79,7 @@ const removeCard = async (id) => {
 export {
     readAllCard,
     readCardById,
+    readCardByIdUser,
     createCard,
     updateCard,
     removeCard

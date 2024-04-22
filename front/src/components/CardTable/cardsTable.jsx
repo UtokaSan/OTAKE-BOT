@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import '../../styles/components/cardstable.scss';
 import RowCard from "./rowCard.jsx";
-import { getAllCard } from "../../services/cardService.js";
 import RowCardEdit from "./rowCardEdit.jsx";
+import { getAllCardWithOneUserId } from "../../services/cardService.js";
 
-function CardsTable() {
+function CardsTable({id}) {
     const [cards, setCards] = useState([]); // Renamed 'cardss' to 'cards'
     const [toggleChange, setToggleChange] = useState(-1);
 
+    console.log("id : ", id)
     const fetchCards = async () => {
-        const cardsData = await getAllCard();
+        const cardsData = await getAllCardWithOneUserId(id);
         setCards(cardsData);
-        console.log(cards);
+        // console.log(cards);
     };
 
     useEffect(() => {
@@ -38,6 +39,7 @@ function CardsTable() {
                             <th>Card Rarity</th>
                             <th>Attack</th>
                             <th>Life</th>
+                            <th>Owner</th>
                             <th className="tr__deleteCard">Delete</th>
                             <th className="center">Edit</th>
                         </tr>

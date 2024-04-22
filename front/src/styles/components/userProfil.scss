@@ -6,10 +6,44 @@
   display: flex;
   gap: 2.5em;
 
+  #container__image {
+    #container__imagePlayer {
+      min-width: 100px;
+      width: 200px;
+      height: auto;
+      max-height: 250px;
+    }
+  }
+
   #container_userinformation {
     h2 {
       margin: 0;
       font-size: 2em;
+      display: flex;
+
+      .button__editcard {
+        display: flex;
+
+        align-items: center;
+
+        margin-left: 20px;
+        padding: 7px 0 0;
+        width: auto;
+        height: auto;
+
+        svg {
+          width: 20px;
+          height: AUTO;
+          transition: .3s;
+        }
+
+        svg:hover {
+          color: gold;
+          width: 20px;
+          height: AUTO;
+          transition: .3s;
+        }
+      }
     }
   }
 }
@@ -20,5 +54,5 @@
     font-size: 2em;
   }
 
-  
+
 }

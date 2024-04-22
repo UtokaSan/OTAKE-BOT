@@ -8,13 +8,14 @@ import { deleteCard, getAllCard } from "../../services/cardService.js";
 function RowCard({card, reload, setToggleChange, index}) {
 
     const removeItem = async (id) => {
-        const rst = await deleteCard(id);
+        await deleteCard(id);
 
         const cardsData = await getAllCard();
         reload(cardsData);
         console.log(cards);
         setToggleChange(card, index)
     }
+    // console.log(card)
 
     return (
         <tr key={card.id} className={card.rarity}>
@@ -22,7 +23,7 @@ function RowCard({card, reload, setToggleChange, index}) {
                 <img className="tableau_card__image"
                      src={card.image}
                      alt={`Image of ${card.name}`}/>
-                <p>{card.name}</p>
+                <p>{card.id}</p>
             </td>
             <td>
                 {card.name}
@@ -35,6 +36,9 @@ function RowCard({card, reload, setToggleChange, index}) {
             </td>
             <td>
                 {card.pv}
+            </td>
+            <td>
+                {card.owner_id ? card.owner_id : "Not Obtain"}
             </td>
             <td>
                 <button className="button__deletecard"

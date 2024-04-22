@@ -2,7 +2,8 @@ import {
     createUser,
     deleteUser,
     readUserById,
-    readUsers
+    readUsers,
+    updateUser
 } from "../services/userService.js";
 
 const getAllUser = async (req, res) => {
@@ -16,6 +17,46 @@ const getAllUser = async (req, res) => {
     if (users === undefined) {
         res.status(500).send({message: "Internal Server Error"});
     }
+}
+
+const getOneUserById = async (req, res) => {
+    const id = req.params.id
+
+    const users = readUserById(id)
+        .then((users) => {
+            res.status(200).send(users);
+        }).catch((err) => {
+            console.error("error executing query:", err);
+            res.status(500).send({message: "Internal Server Error"});
+        })
+    if (users === undefined) {
+        res.status(500).send({message: "Internal Server Error"});
+    }
+}
+
+const editUserController = async (req, res) => {
+    const id = req.params.id;
+
+    console.log("req body : ", req.body)
+    console.log("money : ", req.body.money)
+
+    let changeValue = [];
+    if (req.body.discord_id) changeValue.push(`discord_id='${req.body.discord_id}'`);
+    if (req.body.pseudo) changeValue.push(`pseudo='${req.body.pseudo}'`);
+    if (req.body.money) changeValue.push(`money='${req.body.money}'`);
+    if (req.body.win) changeValue.push(`win='${req.body.win}'`);
+    if (req.body.loose) changeValue.push(`loose='${req.body.loose}'`);
+    if (req.body.avatar) changeValue.push(`avatar='${req.body.avatar}'`);
+    if (req.body.elo) changeValue.push(`elo='${req.body.elo}'`);
+    const paramsToChange = changeValue.join(', ');
+
+    updateUser(id, paramsToChange).then((rst) => {
+        console.log(rst);
+        res.status(200).send(rst);
+    }).catch((err) => {
+        console.error("error executing query:", err);
+        res.status(500).send({message: "Internal Server Error"});
+    });
 }
 
 const registerUser = (req, res) => {
@@ -68,4 +109,10 @@ const deleteUserById = (req, res) => {
 //     });
 // }
 
-export { getAllUser, registerUser, deleteUserById };
+export {
+    getAllUser,
+    getOneUserById,
+    editUserController,
+    registerUser,
+    deleteUserById
+};

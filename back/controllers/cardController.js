@@ -2,6 +2,7 @@ import {
     createCard,
     readAllCard,
     readCardById,
+    readCardByIdUser,
     removeCard,
     updateCard
 } from "../services/cardService.js";
@@ -20,6 +21,20 @@ const getOneCard = (req, res) => {
     const id = req.params.id;
 
     readCardById(id).then((card) => {
+        if (card === undefined) res.status(404).send({message: "Not User found"});
+        res.status(200).send(card);
+    }).catch((err) => {
+        console.error("error executing query:", err);
+        res.status(500).send({message: "Internal Server Error"});
+    });
+}
+
+const getAllCardOneIdUser = (req, res) => {
+    const id = req.params.id;
+
+    console.log(id)
+
+    readCardByIdUser(id.toString()).then((card) => {
         if (card === undefined) res.status(404).send({message: "Not User found"});
         res.status(200).send(card);
     }).catch((err) => {
@@ -68,6 +83,7 @@ const updateCardController = (req, res) => {
     if (req.body.attack) changeValue.push(`attack='${req.body.attack}'`);
     if (req.body.pv) changeValue.push(`pv='${req.body.pv}'`);
     if (req.body.rarity) changeValue.push(`rarity='${req.body.rarity}'`);
+    if (req.body.owner_id) changeValue.push(`owner_id='${req.body.owner_id}'`);
 
     const paramsToChange = changeValue.join(', ');
 
@@ -99,6 +115,7 @@ const deleteCardController = (req, res) => {
 export {
     getAllCards,
     getOneCard,
+    getAllCardOneIdUser,
     createCardController,
     updateCardController,
     deleteCardController

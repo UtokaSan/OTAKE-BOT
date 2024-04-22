@@ -23,6 +23,21 @@ const readUserById = async (discord_id) => {
     }
 }
 
+const updateUser = async (discord_id, params) => {
+    const client = Database.getInstance().getClient();
+
+    console.log("discord_id", discord_id)
+    console.log("params", params)
+
+    try {
+        const query = `UPDATE "users" SET ${params} WHERE discord_id = CAST($1 AS VARCHAR) RETURNING *`;
+        const rst = await client.query(query, [discord_id]);
+        return rst.rows[0];
+    } catch (err) {
+        console.error("error executing query:", err);
+    }
+}
+
 const deleteUser = async (id) => {
     const client = Database.getInstance().getClient();
     try {
@@ -56,4 +71,4 @@ const createUser = async (user) => {
     }
 }
 
-export { readUsers, readUserById, createUser, deleteUser }
+export { readUsers, readUserById, updateUser, createUser, deleteUser }
