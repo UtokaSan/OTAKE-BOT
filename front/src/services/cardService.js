@@ -3,6 +3,7 @@ import axios from "axios";
 const getAllCard = async () => {
     try {
         const response = await axios.get("http://localhost:3000/card/");
+        console.log("res : ", response)
         return response.data;
     } catch (error) {
         throw error;

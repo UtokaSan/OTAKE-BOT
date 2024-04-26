@@ -5,7 +5,6 @@ const getAllUser = async () => {
     try {
         console.log("print")
         const response = await axios.get("http://localhost:3000/user/");
-        await console.log(response)
         await console.log("response : ")
         await console.log(response.data)
         return response.data;

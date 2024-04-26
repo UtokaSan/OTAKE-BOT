@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react';
 import '../../styles/components/cardstable.scss';
 import RowCard from "./rowCard.jsx";
 import RowCardEdit from "./rowCardEdit.jsx";
-import { getAllCardWithOneUserId } from "../../services/cardService.js";
+import {
+    getAllCard,
+    getAllCardWithOneUserId
+} from "../../services/cardService.js";
 
 function CardsTable({id}) {
     const [cards, setCards] = useState([]); // Renamed 'cardss' to 'cards'
@@ -10,9 +13,11 @@ function CardsTable({id}) {
 
     console.log("id : ", id)
     const fetchCards = async () => {
-        const cardsData = await getAllCardWithOneUserId(id);
+        let cardsData
+        if (id !== undefined) cardsData = await getAllCardWithOneUserId(id);
+        else cardsData = await getAllCard();
+        console.log("cards : ", cardsData);
         setCards(cardsData);
-        // console.log(cards);
     };
 
     useEffect(() => {

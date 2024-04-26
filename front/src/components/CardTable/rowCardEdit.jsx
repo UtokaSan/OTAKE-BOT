@@ -6,8 +6,6 @@ import {
     editCard,
     getAllCard
 } from "../../services/cardService.js";
-// import img from '../assets/img.png';
-// import '../styles/style.css'
 
 function RowCard({card, reload, setToggleChange}) {
     const [cardName, setCardName] = useState(card.name);
