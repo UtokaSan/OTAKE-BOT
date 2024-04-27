@@ -1,5 +1,6 @@
 const {pgClient} = require("../database_config");
 
+//AUTO ADD COOLDOWN FOR ALL USERS
 
 async function addCooldownUserInDb(member, client) {
     try {
@@ -20,9 +21,10 @@ async function addAllCooldownUserInDb(client) {
             const members = await guild.members.fetch();
             const memberIds = Array.from(members.keys());
             const res = await pgClient.query('SELECT * FROM cooldown_reward WHERE discord_id = ANY($1)', [memberIds]);
-            if (res.rows.length === 0) {
+            let existingCooldownUser = res.rows.map(row => row.discord_id);
+            if (res.rows.length <= memberIds.length) {
                 for (const member of members.values()) {
-                    if (!member.user.bot) {
+                    if (!member.user.bot && !existingCooldownUser.includes(member.id)) {
                         await addCooldownUserInDb(member, client)
                         console.log('Cooldown added in db');
                     }
@@ -32,7 +34,7 @@ async function addAllCooldownUserInDb(client) {
             console.error('Error fetching guild members:', error);
         }
     }
-    setInterval(checkAndAddCooldown,60 * 1000);
+    setInterval(checkAndAddCooldown,10 * 1000);
 }
 
 module.exports = {

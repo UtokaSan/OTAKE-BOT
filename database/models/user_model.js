@@ -4,8 +4,10 @@ const {pgClient} = require("../database_config");
 async function addUserInDb(member, client) {
     try {
         const userId = member.user.id;
+        console.log("id: " + userId);
         const user = await client.users.fetch(userId);
         const pseudo = user.username;
+        console.log(user.username)
         const avatar = user.displayAvatarURL();
         const queryText = 'INSERT INTO users (discord_id, avatar, money, pseudo, elo) VALUES ($1, $2, $3, $4, $5)';
         const values = [userId, avatar, 0, pseudo, 0];

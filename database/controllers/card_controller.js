@@ -1,7 +1,7 @@
 const {pgClient} = require("../database_config");
 
 async function createCard(owner_id, name, rarity, price, attack, pv, image) {
-    const queryText = 'INSERT INTO cards (owner_id, name, attack, pv, image, rarity, price) VALUES ($1, $2, $3, $4, $5, $6, $7)';
+    const queryText = 'INSERT INTO cards (owner_id, name, rarity, price, attack, pv, image) VALUES ($1, $2, $3, $4, $5, $6, $7)';
     const values = [owner_id, name, rarity, price, attack, pv, image];
     await pgClient.query(queryText, values);
 }

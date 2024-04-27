@@ -1,15 +1,18 @@
 const jikan = require("@mateoaranda/jikanjs");
 const {EmbedBuilder} = require("discord.js");
 const {User} = require("./gacha/class/User");
-
+const {Cooldown} = require("./gacha/class/Cooldown");
+const {DurationCooldown} = require("../enums/DurationCooldown");
 async function gameQuizzCommand(interaction) {
     let user = new User(interaction.user.id);
-
-    let cooldown = await user.takeCooldown();
-    if (cooldown.hours <= 0 && cooldown.minutes <= 0 && cooldown.seconds <= 0) {
+    let cooldown = new Cooldown(interaction.user.id);
+    if (!await cooldown.checkCooldown("quizz")) {
         await interaction.reply("Game quizz started!");
         let randomCharacter = await randomCharacterAnime();
         let nameCharacter = randomCharacter.data.name;
+        if (nameCharacter.includes("(")) {
+            nameCharacter.replace(/\([^)]*\)/g, '')
+        }
         image = randomCharacter.data.images.jpg.image_url;
         const message = new EmbedBuilder()
             .setTitle("Who is this character?")
@@ -26,12 +29,12 @@ async function gameQuizzCommand(interaction) {
                 user._money += 100;
                 await user.updateMoney()
             }
-            await user.addCooldown();
+            await cooldown.setCooldown("quizz", DurationCooldown.QUIZZ);
             collector.stop();
         });
     } else {
-        const {hours, minutes, seconds} = await user.takeCooldown();
-        await interaction.reply(`You have to wait ${hours} hours, ${minutes} minutes, ${seconds} secondes to play again`);
+        let time = await cooldown.differenceTime("quizz");
+        await interaction.reply(`You have to wait ${time.hours} hours, ${time.minutes} minutes, ${time.seconds} secondes to play again`);
     }
 }
 

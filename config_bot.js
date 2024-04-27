@@ -10,7 +10,7 @@ const {executeShopGacha} = require("./games/gacha/shop_gacha");
 const {addAllCooldownUserInDb, addCooldownUserInDb} = require("./database/models/cooldown_model");
 
 const client = new Client({ intents: [
-    GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMembers
+    GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildPresences
 ]});
 
 client.once(Events.ClientReady, readyClient => {
@@ -32,7 +32,7 @@ client.on(Events.InteractionCreate, async interaction => {
             await gameQuizzCommand(interaction);
             break;
         case gameGacha.name:
-            await executeGacha(interaction);
+            await executeGacha(interaction, client);
             await executeShopGacha(interaction);
             break;
         case dataProfile.name:
@@ -46,7 +46,7 @@ client.on('ready', async (client) => {
 });
 
 client.on('guildMemberAdd', async (member) => {
-    await addUserInDb(member);
+    await addUserInDb(member, client);
     await addCooldownUserInDb(member);
 })
 
