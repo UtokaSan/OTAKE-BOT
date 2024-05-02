@@ -3,8 +3,7 @@ import '../styles/pages/homePage.scss';
 import ContainerTableauPlayer
     from "../components/PlayerTable/ContainerTablePlayers.jsx";
 
-function Name() {
-    console.log("Home")
+function Home() {
     return (
         <div id="div__homePage">
             <h1> HomePage</h1>
@@ -13,4 +12,4 @@ function Name() {
     )
 }
 
-export default Name
+export default Home

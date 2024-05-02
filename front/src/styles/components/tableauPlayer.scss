@@ -84,16 +84,29 @@
       }
     }
 
-    .online {
+    .tag {
       padding: 5px;
-      background-color: #208537;
-      border: 2px solid #145722;
       margin: 0;
       font-weight: bold;
       color: white;
       width: auto;
       border-radius: 5px;
       text-align: center;
+    }
+
+    .offline {
+      background-color: #8c1f1f;
+      border: 2px solid #5f1414;
+    }
+
+    .online {
+      background-color: #208537;
+      border: 2px solid #145722;
+    }
+
+    .undefined {
+      background-color: #8c8c8c;
+      border: 2px solid #5f5f5f;
     }
   }
 

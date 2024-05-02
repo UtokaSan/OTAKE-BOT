@@ -5,15 +5,40 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Link } from "react-router-dom";
 import { deleteUser, getAllUser } from "../../services/userService.js";
+import io from "socket.io-client";
+
+const ENDPOINT = "ws://localhost:3000";
 
 function TablePlayers() {
     const [players, setPlayers] = useState([]);
+    const [playerStatus, setPlayerStatus] = useState([]);
+
+    useEffect(() => {
+        const socket = io(ENDPOINT);
+
+        socket.on("connect", () => {
+            console.log("Connected to server WS ");
+        });
+
+        socket.on("bienvenue", data => {
+            console.log("Data received:", data);
+        });
+
+        socket.on("multiplayer", status => {
+            console.log("Data received:", status);
+            setPlayerStatus(status);
+        });
+
+        return () => {
+            console.log("Disconnected from server WS");
+            socket.disconnect()
+        };
+    }, []);
 
     useEffect(() => {
         const fetchJoueurs = async () => {
             const PlayerData = await getAllUser();
             await setPlayers(PlayerData);
-            console.log("P", players)
         };
 
         fetchJoueurs();
@@ -56,7 +81,15 @@ function TablePlayers() {
                                 <td>{player.pseudo}</td>
                                 <td>{player.money}</td>
                                 <td>
-                                    <p className="online">Online</p>
+                                    {playerStatus.length !== 0 ? <>
+                                            {playerStatus.includes(player.pseudo) ?
+                                                <p className="tag online">Online</p> :
+                                                <p className="tag offline">Offline</p>
+                                            }
+                                        </> :
+                                        <p className="tag undefined">Undefined</p>
+                                    }
+                                    {/*<p className="online">Online</p>*/}
                                 </td>
                                 <td>
                                     <div className="center">

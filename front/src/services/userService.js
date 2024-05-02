@@ -3,10 +3,7 @@ import axios from "axios";
 const getAllUser = async () => {
     // console.log("email : ", email, "password : ", password);
     try {
-        console.log("print")
         const response = await axios.get("http://localhost:3000/user/");
-        await console.log("response : ")
-        await console.log(response.data)
         return response.data;
     } catch (error) {
         throw error;

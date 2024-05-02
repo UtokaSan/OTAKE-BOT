@@ -85,9 +85,7 @@ const updateCardController = (req, res) => {
     if (req.body.rarity) changeValue.push(`rarity='${req.body.rarity}'`);
     if (req.body.owner_id) changeValue.push(`owner_id='${req.body.owner_id}'`);
 
-    const paramsToChange = changeValue.join(', ');
-
-    updateCard(id, paramsToChange).then((rst) => {
+    updateCard(id, changeValue).then((rst) => {
         res.status(200).send(rst);
     }).catch((err) => {
         console.error("error executing query:", err);
