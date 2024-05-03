@@ -12,7 +12,7 @@ const app = express();
 const port = 3000;
 const corsOptions = {
     origin: 'http://localhost:3001', // Autoriser seulement cette origine
-    methods: ['GET', 'POST'], // Méthodes autorisées
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'], // Méthodes autorisées
     allowedHeaders: ['Content-Type'], // En-têtes autorisés
     credentials: true // Autoriser les cookies et les en-têtes d'authentification
 };
@@ -70,11 +70,11 @@ io.on('connection', (socket) => {
         console.log("Un client vien de se déconnecté");
     });
 
-    socket.on("present", (data) => {
-        console.log("presence : ", data);
-        io.emit('multiplayer', data);
-        console.log("send");
-    })
+    // socket.on("present", (data) => {
+    //     console.log("presence : ", data);
+    //     io.emit('multiplayer', data);
+    //     console.log("send");
+    // })
 
     manageSocketGame(io, socket);
 

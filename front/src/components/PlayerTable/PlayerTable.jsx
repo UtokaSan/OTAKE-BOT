@@ -62,12 +62,12 @@ function TablePlayers() {
                     <table id="tableau-player">
                         <thead>
                         <tr>
-                            <th>ID Discord</th>
+                            <th>Image Profil</th>
                             <th>Pseudo</th>
-                            <th>Argent</th>
+                            <th>Money</th>
                             <th className="center">Status</th>
-                            <th id="tr__deleteUser">Supprimer</th>
-                            <th>Plus</th>
+                            <th id="tr__deleteUser">Delete</th>
+                            <th>More</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -76,7 +76,6 @@ function TablePlayers() {
                                 <td id="id_table">
                                     <img className="tableau-player__avatarImg"
                                          src={player.avatar} alt=""/>
-                                    <p>{player.discord_id}</p>
                                 </td>
                                 <td>{player.pseudo}</td>
                                 <td>{player.money}</td>
@@ -87,7 +86,8 @@ function TablePlayers() {
                                                 <p className="tag offline">Offline</p>
                                             }
                                         </> :
-                                        <p className="tag undefined">Undefined</p>
+                                        <p className="tag undefined">Loading
+                                            ...</p>
                                     }
                                     {/*<p className="online">Online</p>*/}
                                 </td>
