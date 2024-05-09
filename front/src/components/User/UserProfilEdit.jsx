@@ -61,7 +61,7 @@ function UserProfil({user, setToggleChange, id}) {
                                      onBlur={handleBlur} // to save when it loses focus
                                      size={userMoney.length}/>💰</p>
                     <p>He has also played : {+user.win + +user.loose} games
-                        =>
+                        -
                         win
                         :
                         <input type="text"

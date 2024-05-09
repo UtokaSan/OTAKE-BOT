@@ -1,128 +1,25 @@
-.center {
-  display: flex;
-  justify-content: center;
+
+.tag {
+  padding: 5px;
+  margin: 0;
+  font-weight: bold;
+  color: white;
+  width: auto;
+  border-radius: 5px;
+  text-align: center;
 }
 
-#tableau-player {
-  //border-collapse: separate;
-  border-spacing: 0; // Supprime l'espace entre les cellules
-  margin: 20px auto;
-  font-size: 0.9em;
-  font-family: sans-serif;
-  min-width: 400px;
-  width: 90%;
-  overflow-x: auto; /* Active la barre de défilement horizontale si nécessaire */
+.offline {
+  background-color: #8c1f1f;
+  border: 2px solid #5f1414;
+}
 
-  //box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+.online {
+  background-color: #208537;
+  border: 2px solid #145722;
+}
 
-  thead {
-    //border-collapse: separate;
-    //border-spacing: 0;
-
-    tr {
-      table-layout: auto;
-      background-color: #009879;
-      color: #ffffff;
-      text-align: left;
-
-      th {
-        table-layout: auto;
-        padding: 12px 15px;
-      }
-
-      #tr__deleteUser {
-        text-align: center;
-      }
-    }
-  }
-
-  #id_table {
-    display: flex;
-    align-items: center;
-  }
-
-  tr td {
-    //border-bottom: 1px solid black;
-    table-layout: auto;
-
-    padding: 12px 15px;
-    margin: auto 0;
-    //border-left: 1px solid #00362d;
-
-    &:first-child {
-      border-left: none;
-    }
-
-    a {
-      text-decoration: none;
-      color: #1a1a1a;
-    }
-
-    .tableau-player__avatarImg {
-      width: 50px;
-      height: 50px;
-      margin-right: 1em;
-    }
-
-
-    button {
-      padding: 5px;
-      width: auto;
-      height: auto;
-
-      svg {
-        width: 20px;
-        height: AUTO;
-        transition: .3s;
-      }
-
-      svg:hover {
-        color: red;
-        width: 20px;
-        height: AUTO;
-        transition: .3s;
-      }
-    }
-
-    .tag {
-      padding: 5px;
-      margin: 0;
-      font-weight: bold;
-      color: white;
-      width: auto;
-      border-radius: 5px;
-      text-align: center;
-    }
-
-    .offline {
-      background-color: #8c1f1f;
-      border: 2px solid #5f1414;
-    }
-
-    .online {
-      background-color: #208537;
-      border: 2px solid #145722;
-    }
-
-    .undefined {
-      background-color: #8c8c8c;
-      border: 2px solid #5f5f5f;
-    }
-  }
-
-  tr:not(:last-child) {
-    border-bottom: 1px solid black;
-  }
-
-  tbody {
-
-
-    tr {
-      &:not(:last-child) {
-        td {
-          border-bottom: 1px solid #00362d; // Ajoute une bordure en bas de chaque cellule sauf la dernière
-        }
-      }
-    }
-  }
+.undefined {
+  background-color: #8c8c8c;
+  border: 2px solid #5f5f5f;
 }

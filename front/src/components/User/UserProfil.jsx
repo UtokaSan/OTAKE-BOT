@@ -29,7 +29,7 @@ function UserProfil({user, setToggleChange, id}) {
                         </button>
                     </h2>
                     <p>He has {user.money}💰</p>
-                    <p>He has also played : {+user.win + +user.loose} games =>
+                    <p>He has also played : {+user.win + +user.loose} games -
                         win
                         : {+user.win} and
                         loose
