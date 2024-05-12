@@ -4,8 +4,6 @@ import cors from 'cors';
 import { routerMoney } from "./routers/moneyRouter.js";
 import { routerCard } from "./routers/cardRouter.js";
 import { Server } from "socket.io";
-import Database from "./db/db.js";
-import { manageSocketGame } from "./controllers/Game.js";
 
 
 const app = express();
@@ -34,8 +32,6 @@ app.post('/data', (req, res) => {
     console.log('Données reçues :', req.body);
     res.send('Données reçues avec succès !');
 });
-
-const client = Database.getInstance().getClient();
 
 const server = app.listen(port, () => {
     console.log(`Serveur démarré sur le port ${port}`);
@@ -70,13 +66,13 @@ io.on('connection', (socket) => {
         console.log("Un client vien de se déconnecté");
     });
 
-    // socket.on("present", (data) => {
-    //     console.log("presence : ", data);
-    //     io.emit('multiplayer', data);
-    //     console.log("send");
-    // })
+    socket.on("present", (data) => {
+        console.log("presence : ", data);
+        io.emit('multiplayer', data);
+        console.log("send");
+    })
 
-    manageSocketGame(io, socket);
+    // manageSocketGame(io, socket);
 
     socket.emit('bienvenue', {message: 'Bienvenue sur le serveur Socket.IO!'});
 });
