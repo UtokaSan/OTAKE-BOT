@@ -7,15 +7,19 @@ import {
 } from "../services/userService.js";
 
 const getAllUser = async (req, res) => {
-    const users = readUsers()
-        .then((users) => {
-            res.status(200).send(users);
-        }).catch((err) => {
-            console.error("error executing query:", err);
+    try {
+        const users = readUsers()
+            .then((users) => {
+                res.status(200).send(users);
+            }).catch((err) => {
+                console.error("error executing query:", err);
+                res.status(500).send({message: "Internal Server Error"});
+            })
+        if (users === undefined) {
             res.status(500).send({message: "Internal Server Error"});
-        })
-    if (users === undefined) {
-        res.status(500).send({message: "Internal Server Error"});
+        }
+    } catch (err) {
+        console.log("error with db");
     }
 }
 

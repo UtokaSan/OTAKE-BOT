@@ -1,9 +1,9 @@
 import express from 'express';
-import { routerUser } from "./routers/userRouter.js";
 import cors from 'cors';
+import { Server } from "socket.io";
+import { routerUser } from "./routers/userRouter.js";
 import { routerMoney } from "./routers/moneyRouter.js";
 import { routerCard } from "./routers/cardRouter.js";
-import { Server } from "socket.io";
 
 
 const app = express();

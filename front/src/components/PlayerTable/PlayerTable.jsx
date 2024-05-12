@@ -11,40 +11,7 @@ import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Paper from '@mui/material/Paper';
 import { visuallyHidden } from '@mui/utils';
-
-// function createData(id, name, rarity, calories, fat, carbs, protein, readMore) {
-//     return {id, name, rarity, calories, fat, carbs, protein, readMore};
-// }
-
-// const rows = [
-//     createData(1, 'Loading', "Loading", "Loading", "Loading", "Loading", "Loading",
-//         <a
-//             href="http://google.com">Loading</a>),
-//     createData(2, 'Donut', "Uncommun", 452, 25.0, 51, 4.9, <a
-//         href="http://google.com">Read more</a>),
-// createData(3, 'Eclair', "Commun", 262, 16.0, 24, 6.0, <a
-//     href="http://google.com">Read more</a>),
-// createData(4, 'Frozen yoghurt', "Commun", 159, 6.0, 24, 4.0, <a
-//     href="http://google.com">Read more</a>),
-// createData(5, 'Gingerbread', "Uncommun", 356, 16.0, 49, 3.9, <a
-//     href="http://google.com">Read more</a>),
-// createData(6, 'Honeycomb', "Legendary", 408, 3.2, 87, 6.5, <a
-//     href="http://google.com">Read more</a>),
-// createData(7, 'Ice cream sandwich', "Commun", 237, 9.0, 37, 4.3, <a
-//     href="http://google.com">Read more</a>),
-// createData(8, 'Jelly Bean', "Commun", 375, 0.0, 94, 0.0, <a
-//     href="http://google.com">Read more</a>),
-// createData(9, 'KitKat', "Commun", 518, 26.0, 65, 7.0, <a
-//     href="http://google.com">Read more</a>),
-// createData(10, 'Lollipop', "Commun", 392, 0.2, 98, 0.0, <a
-//     href="http://google.com">Read more</a>),
-// createData(11, 'Marshmallow', "Commun", 318, 0, 81, 2.0, <a
-//     href="http://google.com">Read more</a>),
-// createData(12, 'Nougat', "Commun", 360, 19.0, 9, 37.0, <a
-//     href="http://google.com">Read more</a>),
-// createData(13, 'Oreo', "Commun", 437, 18.0, 63, 4.0, <a
-//     href="http://google.com">Read more</a>),
-// ];
+import "../../styles/components/tableauPlayer.scss"
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) return -1;
@@ -89,10 +56,6 @@ function stableSort(array, comparator) {
         return a[1] - b[1];
     });
     return stabilizedThis.map((el) => el[0]);
-}
-
-function getData() {
-
 }
 
 const headCells = [
@@ -155,13 +118,14 @@ EnhancedTableHead.propTypes = {
     orderBy: PropTypes.string.isRequired,
 };
 
-export default function BasicTable({rows}) {
+export default function BasicTable({rows, status}) {
+    console.log("rows : ", rows);
+    console.log("status : ", status);
     const [order, setOrder] = React.useState('desc'); // or 'desc'
     const [orderBy, setOrderBy] = React.useState('rarity');
 
-    const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
-    const [dense, setDense] = React.useState(false);
+    const [dense, _] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
     console.log("rows : ", rows);
@@ -207,15 +171,26 @@ export default function BasicTable({rows}) {
                                           sx={{cursor: 'pointer'}}>
                                     <TableCell component="th"
                                                id={`enhanced-table-checkbox-${index}`}
-                                               scope="row" padding="none">
+                                               scope="row">
+
                                         {row.pseudo}
                                     </TableCell>
                                     <TableCell
                                         align="left">{row.money}</TableCell>
-                                    {/*<TableCell*/}
-                                    {/*    align="left">{row.rarity}</TableCell>*/}
-                                    <TableCell
-                                        align="right">{row.status}</TableCell>
+                                    <TableCell align="right">
+                                        {status.length === 0 ? (
+                                            <div
+                                                className="tag undefined">Loading...</div>
+                                        ) : (
+                                            <div
+                                                className={`tag ${
+                                                    status.includes(row.pseudo) ? 'online' : 'offline'
+                                                }`}
+                                            >
+                                                {status.includes(row.pseudo) ? 'online' : 'offline'}
+                                            </div>
+                                        )}
+                                    </TableCell>
                                     <TableCell
                                         align="right">delete</TableCell>
                                     <TableCell

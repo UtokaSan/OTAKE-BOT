@@ -13,8 +13,6 @@ const getAllUser = async () => {
 const getOneUser = async (id) => {
     try {
         const response = await axios.get(`http://localhost:3000/user/${id}`);
-        // await console.log("response : ")
-        // await console.log(response.data)
         return response.data;
     } catch (error) {
         throw error;
