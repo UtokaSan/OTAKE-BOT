@@ -23,6 +23,16 @@ const readUserById = async (discord_id) => {
     }
 }
 
+const readUserByPseudo = async (name) => {
+    const client = Database.getInstance().getClient();
+    try {
+        const results = await client.query(`SELECT * FROM "users" WHERE pseudo = $1`, [name]);
+        return results.rows[0];
+    } catch (err) {
+        console.error("error executing query:", err);
+    }
+}
+
 const updateUser = async (discord_id, params) => {
     const client = Database.getInstance().getClient();
 
@@ -60,8 +70,8 @@ const createUser = async (user) => {
     const client = Database.getInstance().getClient();
 
     try {
-        const queryText = `INSERT INTO "users"(discord_id, pseudo, money) VALUES ($1, $2, $3) RETURNING *`;
-        const values = [user.discord_id, user.pseudo, user.money];
+        const queryText = `INSERT INTO "users"(discord_id, pseudo, money,password,avatar) VALUES ($1, $2, $3,$4,$5) RETURNING *`;
+        const values = [user.discord_id, user.pseudo, user.money, user.password, user.avatar];
         const results = await client.query(queryText, values);
 
         return await results.rows[0];
@@ -71,4 +81,11 @@ const createUser = async (user) => {
     }
 }
 
-export { readUsers, readUserById, updateUser, createUser, deleteUser }
+export {
+    readUsers,
+    readUserById,
+    readUserByPseudo,
+    updateUser,
+    createUser,
+    deleteUser
+}

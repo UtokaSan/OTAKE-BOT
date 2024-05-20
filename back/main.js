@@ -4,6 +4,9 @@ import { Server } from "socket.io";
 import { routerUser } from "./routers/userRouter.js";
 import { routerMoney } from "./routers/moneyRouter.js";
 import { routerCard } from "./routers/cardRouter.js";
+import Database from "./db/db.js";
+import cookieParser from 'cookie-parser';
+// const cookieParser = require('cookie-parser');
 
 
 const app = express();
@@ -16,8 +19,14 @@ const corsOptions = {
 };
 
 
+//init DB
+Database.getInstance().getClient();
+
+
 app.use(express.json());
 app.use(cors(corsOptions));
+app.use(cookieParser());
+
 
 app.get('/', (req, res) => {
     console.log('Requête GET reçue');
