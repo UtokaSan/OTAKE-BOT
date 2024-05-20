@@ -11,11 +11,7 @@ import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Paper from '@mui/material/Paper';
 import { visuallyHidden } from '@mui/utils';
-import "../../styles/components/tableauPlayer.scss"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { deleteUser } from "../../services/userService.js";
-import { Link } from "react-router-dom";
+import "../../styles/components/cardstable.scss";
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) return -1;
@@ -25,6 +21,8 @@ function descendingComparator(a, b, orderBy) {
 
 function getRarityOrder(rarity) {
     switch (rarity) {
+        case 'Admin':
+            return 4;
         case 'Legendary':
             return 3;
         case 'Uncommun':
@@ -35,6 +33,15 @@ function getRarityOrder(rarity) {
             return 0;
     }
 }
+
+// function getOwnerOrder(name) {
+//     switch (name) {
+//         case 'not owned':
+//             return 1;
+//         default:
+//             return 0;
+//     }
+// }
 
 function getComparator(order, orderBy) {
     return order === 'desc'
@@ -64,20 +71,23 @@ function stableSort(array, comparator) {
 
 const headCells = [
     {
-        id: 'pseudo',
+        id: 'name',
         numeric: false,
         disablePadding: false,
-        label: 'Pseudo'
+        label: 'Name'
     },
     {
-        id: 'money',
-        numeric: false,
-        disablePadding: false,
-        label: 'Money'
+        id: 'attack',
+        numeric: true,
+        disablePadding: true,
+        label: 'Attack'
     },
-    {id: 'status', numeric: true, disablePadding: false, label: 'Status'},
-    {id: 'delete', numeric: true, disablePadding: false, label: 'Delete'},
-    {id: 'readMore', numeric: true, disablePadding: false, label: 'Read more'}
+    {id: 'pv', numeric: true, disablePadding: true, label: 'Pv'},
+    {id: 'price', numeric: true, disablePadding: true, label: 'Price'},
+    {id: 'rarity', numeric: true, disablePadding: true, label: 'Rarity'},
+    {id: 'owner', numeric: true, disablePadding: true, label: 'Owner'},
+    {id: 'edit', numeric: true, disablePadding: true, label: 'Edit'},
+    {id: 'delete', numeric: true, disablePadding: true, label: 'Delete'}
 ];
 
 function EnhancedTableHead(props) {
@@ -100,7 +110,6 @@ function EnhancedTableHead(props) {
                             direction={orderBy === headCell.id ? order : 'asc'}
                             onClick={createSortHandler(headCell.id)}
                         >
-
                             {headCell.label}
                             {orderBy === headCell.id ? (
                                 <Box component="span" sx={visuallyHidden}>
@@ -121,27 +130,35 @@ EnhancedTableHead.propTypes = {
     orderBy: PropTypes.string.isRequired,
 };
 
-export default function BasicTable({rows, status, reload}) {
-    const [order, setOrder] = React.useState('desc'); // or 'desc'
+export default function CardsTable({rows, _}) {
+    console.log("rows CardsTable: ", rows);
+
+    const [order, setOrder] = React.useState('desc');
     const [orderBy, setOrderBy] = React.useState('rarity');
-
     const [page, setPage] = React.useState(0);
-    const [dense, _] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [visibleRows, setVisibleRows] = React.useState([]);
 
-    const deleteId = async (id) => {
-        console.log("id : ", id);
-        await deleteUser(id);
-        await reload();
-        await console.log("finish")
-    }
+    React.useEffect(() => {
+        const sortedRows = stableSort(rows, getComparator(order, orderBy)).slice(
+            page * rowsPerPage,
+            page * rowsPerPage + rowsPerPage
+        );
+        setVisibleRows(sortedRows);
+    }, [rows, order, orderBy, page, rowsPerPage]);
+
+    // const deleteId = async (id) => {
+    //     console.log("id : ", id);
+    //     await deleteUser(id);
+    //     await reload();
+    //     await console.log("finish");
+    // };
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
     };
-
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -152,99 +169,76 @@ export default function BasicTable({rows, status, reload}) {
         setPage(0);
     };
 
-    rows.map(row => {
-        console.log("row : ", row.avatar)
-    })
-
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
-    const visibleRows = React.useMemo(() => {
-        return stableSort(rows, getComparator(order, orderBy)).slice(
-            page * rowsPerPage,
-            page * rowsPerPage + rowsPerPage
-        );
-    }, [order, orderBy, page, rowsPerPage]);
-
 
     return (
         <Box sx={{width: '100%'}}>
             <Paper sx={{width: '100%', mb: 2}}>
                 <TableContainer>
                     <Table sx={{minWidth: 750}} aria-labelledby="tableTitle"
-                           size={dense ? 'small' : 'medium'}>
-                        <EnhancedTableHead order={order} orderBy={orderBy}
-                                           onRequestSort={handleRequestSort}
-                                           rowCount={rows.length}/>
+                           size={'medium'}>
+                        <EnhancedTableHead
+                            order={order}
+                            orderBy={orderBy}
+                            onRequestSort={handleRequestSort}
+                            rowCount={rows.length}
+                        />
                         <TableBody>
                             {visibleRows.map((row, index) => (
                                 <TableRow hover key={row.discord_id}
                                           sx={{cursor: 'pointer'}}>
-                                    <TableCell component="th"
-                                               className="table__cell__pseudo"
-                                               id={`enhanced-table-checkbox-${index}`}
-                                               scope="row">
+                                    <TableCell
+                                        component="th"
+                                        className="table__cell__pseudo"
+                                        id={`enhanced-table-checkbox-${index}`}
+                                        scope="row"
+                                    >
                                         <div
                                             className="playerTable__div__container">
                                             <img
-                                                src={row.avatar ? row.avatar : "https://cdn.whatemoji.org/wp-content/uploads/2020/07/Robot-Emoji.png"}
+                                                src={row.image ? row.image : "https://cdn.whatemoji.org/wp-content/uploads/2020/07/Robot-Emoji.png"}
                                                 className={"image__avatar"}
-                                                alt={`profile picture of ${row.pseudo}`}/>
-                                            <p>
-                                                {row.pseudo}
-                                            </p>
+                                                alt={`Card picture of ${row.name}`}
+                                            />
+                                            <p>{row.name}</p>
                                         </div>
                                     </TableCell>
                                     <TableCell
-                                        align="left">{row.money}</TableCell>
+                                        align="right">{row.attack}</TableCell>
+                                    <TableCell
+                                        align="right">{row.pv}</TableCell>
+                                    <TableCell
+                                        align="right">{row.price}</TableCell>
                                     <TableCell align="right">
-                                        {status.length === 0 ? (
-                                            <div
-                                                className="tag undefined">Loading...</div>
-                                        ) : (
-                                            <div
-                                                className={`tag ${
-                                                    status.includes(row.pseudo) ? 'online' : 'offline'
-                                                }`}
-                                            >
-                                                {status.includes(row.pseudo) ? 'online' : 'offline'}
-                                            </div>
-                                        )}
+                                        <div
+                                            className={`tag__card tag__card${row.rarity}`}>
+                                            {row.rarity}
+                                        </div>
                                     </TableCell>
-                                    <TableCell
-                                        align="right">
-                                        <button
-                                            onClick={() => {
-                                                console.log("row", row.discord_id, "index : ", index)
-                                                deleteId(row.discord_id)
-                                            }}
-                                            className="button__deletecard">
-                                            <FontAwesomeIcon
-                                                className="button__deletecard"
-                                                icon={faTrash}/>
-                                        </button>
+                                    <TableCell align="right">
+                                        {row.pseudo_owner ? row.pseudo_owner : "not owned"}
                                     </TableCell>
-                                    <TableCell
-                                        align="right">
-                                        <Link
-                                            to={`/user/${row.discord_id}`}> Read
-                                            more </Link>
-                                    </TableCell>
+                                    <TableCell align="right">edit</TableCell>
+                                    <TableCell align="right">delete</TableCell>
                                 </TableRow>
                             ))}
                             {emptyRows > 0 && (
-                                <TableRow
-                                    style={{height: (dense ? 33 : 53) * emptyRows}}>
+                                <TableRow style={{height: 53 * emptyRows}}>
                                     <TableCell colSpan={6}/>
                                 </TableRow>
                             )}
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <TablePagination rowsPerPageOptions={[5, 10, 25]}
-                                 component="div" count={rows.length}
-                                 rowsPerPage={rowsPerPage} page={page}
-                                 onPageChange={handleChangePage}
-                                 onRowsPerPageChange={handleChangeRowsPerPage}/>
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 25]}
+                    component="div"
+                    count={rows.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
             </Paper>
         </Box>
     );

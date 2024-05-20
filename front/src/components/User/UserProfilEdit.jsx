@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 // import img from '../assets/img.png';
 import '../../styles/components/userProfil.scss'
-import CardsTable from "../CardTable/cardsTable.jsx";
+import CardsTable from "../CardTable/CardsTable.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { editUser } from "../../services/userService.js";

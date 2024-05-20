@@ -19,6 +19,10 @@ const getOneUser = async (id) => {
     }
 }
 
+// const getConnected = async () => {
+//
+// }
+
 const editUser = async (id, params) => {
 
     console.log("id : ", id)
@@ -35,10 +39,10 @@ const editUser = async (id, params) => {
     }
 }
 
-
 const deleteUser = async (id) => {
     try {
-        const response = await axios.delete(`http://localhost:3001/user/${id}`);
+        console.log("Ser id : ", id);
+        const response = await axios.delete(`http://localhost:3000/user/${id}`);
         await console.log("delete response")
         return response.data;
     } catch (error) {

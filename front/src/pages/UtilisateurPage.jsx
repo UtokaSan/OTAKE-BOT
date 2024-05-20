@@ -12,9 +12,10 @@ function UtilisateurPage() {
     const [user, setUser] = useState();
 
     useEffect(() => {
-        console.log("test")
-        getUserData()
+        console.log("test");
+        getUserData();
     }, [])
+
 
     const getUserData = async () => {
         const user = await getOneUser(id);
@@ -22,6 +23,11 @@ function UtilisateurPage() {
         await setUser(user)
     }
 
+    useEffect(() => {
+        getUserData();
+    }, [getUserData]);
+
+    
     return (
         <div id="utilisateurPage">
             {/*<form action="">*/}
@@ -33,7 +39,6 @@ function UtilisateurPage() {
                                         id={id}/> :
                         <UserProfil user={user}
                                     setToggleChange={setToggleChange} id={id}/>}
-                    {/*</form>*/}
                 </>
                 :
                 <p>Chargement</p>
