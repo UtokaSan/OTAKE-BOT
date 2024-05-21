@@ -91,7 +91,7 @@ class Database {
 
         console.log("All tables created");
     }
-
+  
     createTestData() {
         this._client.query(`INSERT INTO "users" (discord_id, pseudo, password, money, win, loose, elo, avatar, role) VALUES ('123456789', 'test', 'test', 100, 0, 0, 0, 'https://2damnfunny.com/wp-content/uploads/2013/02/Cute-Pikachu-Gif-Pokemon.gif', 0);`);
         this._client.query(`INSERT INTO "users" (discord_id, pseudo, password, money, win, loose, elo, avatar, role) VALUES ('987654321', 'test2', 'test2', 100, 0, 0, 0, 'https://i.pinimg.com/564x/5d/c2/de/5dc2de2f009fe24461b2492c24e312d5.jpg', 0);`);

@@ -83,7 +83,15 @@ const updateCardController = (req, res) => {
     if (req.body.attack) changeValue.push(`attack='${req.body.attack}'`);
     if (req.body.pv) changeValue.push(`pv='${req.body.pv}'`);
     if (req.body.rarity) changeValue.push(`rarity='${req.body.rarity}'`);
-    if (req.body.owner_id) changeValue.push(`owner_id='${req.body.owner_id}'`);
+
+    if (req.body.owner_id === -1) changeValue.push(`owner_id=null`);
+    else if (req.body.owner_id) changeValue.push(`owner_id='${req.body.owner_id}'`);
+
+    console.log("changeValue : ", changeValue);
+    if (changeValue.length === 0) {
+        res.status(400).send({message: "Missing fields"});
+        return;
+    }
 
     updateCard(id, changeValue).then((rst) => {
         res.status(200).send(rst);

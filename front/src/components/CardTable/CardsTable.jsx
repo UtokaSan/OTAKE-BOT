@@ -34,15 +34,6 @@ function getRarityOrder(rarity) {
     }
 }
 
-// function getOwnerOrder(name) {
-//     switch (name) {
-//         case 'not owned':
-//             return 1;
-//         default:
-//             return 0;
-//     }
-// }
-
 function getComparator(order, orderBy) {
     return order === 'desc'
         ? (a, b) => {
@@ -69,32 +60,33 @@ function stableSort(array, comparator) {
     return stabilizedThis.map((el) => el[0]);
 }
 
-const headCells = [
-    {
-        id: 'name',
-        numeric: false,
-        disablePadding: false,
-        label: 'Name'
-    },
-    {
-        id: 'attack',
-        numeric: true,
-        disablePadding: true,
-        label: 'Attack'
-    },
-    {id: 'pv', numeric: true, disablePadding: true, label: 'Pv'},
-    {id: 'price', numeric: true, disablePadding: true, label: 'Price'},
-    {id: 'rarity', numeric: true, disablePadding: true, label: 'Rarity'},
-    {id: 'owner', numeric: true, disablePadding: true, label: 'Owner'},
-    {id: 'edit', numeric: true, disablePadding: true, label: 'Edit'},
-    {id: 'delete', numeric: true, disablePadding: true, label: 'Delete'}
-];
-
 function EnhancedTableHead(props) {
-    const {order, orderBy, onRequestSort} = props;
+    const {order, orderBy, onRequestSort, isConnect} = props;
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
+
+    const headCells = [
+        {id: 'name', numeric: false, disablePadding: false, label: 'Name'},
+        {id: 'attack', numeric: true, disablePadding: true, label: 'Attack'},
+        {id: 'pv', numeric: true, disablePadding: true, label: 'Pv'},
+        {id: 'price', numeric: true, disablePadding: true, label: 'Price'},
+        {
+            id: 'rarity',
+            numeric: true,
+            disablePadding: true,
+            label: 'Rarity',
+            align: 'center'
+        },
+        {id: 'owner', numeric: true, disablePadding: true, label: 'Owner'},
+    ];
+
+    if (isConnect) {
+        headCells.push(
+            {id: 'edit', numeric: true, disablePadding: true, label: 'Edit'},
+            {id: 'delete', numeric: true, disablePadding: true, label: 'Delete'}
+        );
+    }
 
     return (
         <TableHead>
@@ -102,8 +94,9 @@ function EnhancedTableHead(props) {
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
-                        align={headCell.numeric ? 'right' : 'left'}
+                        align={headCell.align || (headCell.numeric ? 'right' : 'left')}
                         sortDirection={orderBy === headCell.id ? order : false}
+                        sx={headCell.id === 'rarity' ? {textAlign: 'center'} : null}
                     >
                         <TableSortLabel
                             active={orderBy === headCell.id}
@@ -130,9 +123,7 @@ EnhancedTableHead.propTypes = {
     orderBy: PropTypes.string.isRequired,
 };
 
-export default function CardsTable({rows, _}) {
-    console.log("rows CardsTable: ", rows);
-
+export default function CardsTable({rows, _, isConnect}) {
     const [order, setOrder] = React.useState('desc');
     const [orderBy, setOrderBy] = React.useState('rarity');
     const [page, setPage] = React.useState(0);
@@ -146,13 +137,6 @@ export default function CardsTable({rows, _}) {
         );
         setVisibleRows(sortedRows);
     }, [rows, order, orderBy, page, rowsPerPage]);
-
-    // const deleteId = async (id) => {
-    //     console.log("id : ", id);
-    //     await deleteUser(id);
-    //     await reload();
-    //     await console.log("finish");
-    // };
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -182,11 +166,13 @@ export default function CardsTable({rows, _}) {
                             orderBy={orderBy}
                             onRequestSort={handleRequestSort}
                             rowCount={rows.length}
+                            isConnect={isConnect}
                         />
                         <TableBody>
                             {visibleRows.map((row, index) => (
                                 <TableRow hover key={row.discord_id}
-                                          sx={{cursor: 'pointer'}}>
+                                    // sx={{cursor: 'pointer'}}
+                                >
                                     <TableCell
                                         component="th"
                                         className="table__cell__pseudo"
@@ -209,7 +195,8 @@ export default function CardsTable({rows, _}) {
                                         align="right">{row.pv}</TableCell>
                                     <TableCell
                                         align="right">{row.price}</TableCell>
-                                    <TableCell align="right">
+                                    <TableCell align="center"
+                                               className="table-cell-rarity">
                                         <div
                                             className={`tag__card tag__card${row.rarity}`}>
                                             {row.rarity}
@@ -218,8 +205,14 @@ export default function CardsTable({rows, _}) {
                                     <TableCell align="right">
                                         {row.pseudo_owner ? row.pseudo_owner : "not owned"}
                                     </TableCell>
-                                    <TableCell align="right">edit</TableCell>
-                                    <TableCell align="right">delete</TableCell>
+                                    {isConnect && (
+                                        <>
+                                            <TableCell
+                                                align="right">edit</TableCell>
+                                            <TableCell
+                                                align="right">delete</TableCell>
+                                        </>
+                                    )}
                                 </TableRow>
                             ))}
                             {emptyRows > 0 && (

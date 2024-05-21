@@ -164,6 +164,8 @@ const checkUser = (req, res, next) => {
 const login = async (req, res) => {
     // before this function is called, the checkUser middleware will have already validated the request body
     const {pseudo, password} = req.body;
+    console.log(req.body)
+    console.log("testt")
 
     try {
         const user = await readUserByPseudo(pseudo);
@@ -189,7 +191,12 @@ const login = async (req, res) => {
 
 const isConnect = (req, res) => {
     // const token = req.body.sessionData;
-    const token = req.cookies.jwt;
+    const tokenCookie = req.cookies.jwt;
+    const tokenReq = req.body.jwt;
+    console.log(req.cookies);
+
+    const token = tokenCookie ? tokenCookie : tokenReq;
+
 
     console.log("token : ", token);
 

@@ -4,6 +4,7 @@ import HomePage from "../pages/HomePage.jsx";
 import NavBar from "../components/navBar.jsx";
 import CardPage from "../pages/CardPage.jsx";
 import UtilisateurPage from "../pages/UtilisateurPage.jsx";
+import LoginAdminPage from "../pages/LoginAdminPage.jsx";
 
 
 const AppRouter = createBrowserRouter([
@@ -26,6 +27,12 @@ const AppRouter = createBrowserRouter([
         element: <>
             <NavBar/>
             <HomePage/>
+        </>
+    }, {
+        path: "/login",
+        element: <>
+            <NavBar/>
+            <LoginAdminPage/>
         </>
     },
     {

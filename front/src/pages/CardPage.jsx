@@ -3,7 +3,8 @@ import '../styles/pages/cardsPage.scss';
 import ContainerTableCard from "../components/CardTable/ContainerTableCard.jsx";
 
 function CardPage() {
-    console.log("Home")
+    
+    // console.log("Home")
     return (
         <div id="div__cardpage">
             <h1> CardPage</h1>
