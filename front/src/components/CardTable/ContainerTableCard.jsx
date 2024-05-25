@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { getAllCard } from "../../services/cardService.js";
-import CardsTable from "./CardsTable.jsx";
-import { getAllUser } from "../../services/userService.js";
+import CardsTable from '../CardTable/CardsTable';
 import Cookies from "js-cookie";
 import axios from "axios";
+import { getAllUser } from "../../services/userService.js";
+import { getAllCard } from "../../services/cardService.js";
 
 function ContainerTableCard() {
     const [isLoading, setIsLoading] = useState(true);
@@ -16,17 +16,18 @@ function ContainerTableCard() {
         const user = verifUser();
 
         Promise.all([dataPlayer, dataCard, user]).then((values) => {
-            // console.log("values : ", values);
-            values[1].forEach(card => {
+            values[1]?.forEach(card => {
                 const player = values[0].find(p => p.discord_id === card.owner_id);
                 if (player) {
                     card.pseudo_owner = player.pseudo;
                 }
             });
-            setRows(values[1]);
+            setRows(values[1] || []);
+        }).catch(error => {
+            console.error('Failed to fetch data:', error);
+        }).finally(() => {
+            setIsLoading(false);
         });
-
-        setIsLoading(false)
     }
 
     useEffect(() => {
@@ -35,25 +36,20 @@ function ContainerTableCard() {
 
     const verifUser = () => {
         const user = Cookies.get('jwt');
-        console.log("jwt : " + user);
         if (user) {
             axios.post("http://localhost:3000/user/isconnect", {jwt: user}).then((response) => {
                 const role = Number.parseInt(response.data.role);
                 if (role === 1) {
-                    console.log("connecté");
                     setAdmin(true);
-                    return true;
                 }
-                console.log("Not Admin"); // Because, admin is returning on top.
             }).catch((error) => {
                 console.log(error);
-            })
+            });
         } else {
-            console.log("pas de compte admin");
+            setAdmin(false);
         }
-        setAdmin(false)
-        return false;
     }
+
     return (
         <div>
             <h2>Liste des cartes</h2>

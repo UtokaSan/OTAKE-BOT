@@ -6,27 +6,23 @@ import { routerMoney } from "./routers/moneyRouter.js";
 import { routerCard } from "./routers/cardRouter.js";
 import Database from "./db/db.js";
 import cookieParser from 'cookie-parser';
-// const cookieParser = require('cookie-parser');
-
 
 const app = express();
 const port = 3000;
 const corsOptions = {
-    origin: 'http://localhost:3001', // Autoriser seulement cette origine
-    methods: ['GET', 'POST', 'PATCH', 'DELETE'], // Méthodes autorisées
-    allowedHeaders: ['Content-Type'], // En-têtes autorisés
-    credentials: true // Autoriser les cookies et les en-têtes d'authentification
+    origin: 'http://localhost:3001',
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    allowedHeaders: ['Content-Type'],
+    credentials: true
 };
 
-
-//init DB
-Database.getInstance().getClient();
-
+// init DB
+const dbInstance = Database.getInstance();
+dbInstance.getClient();
 
 app.use(express.json());
 app.use(cors(corsOptions));
 app.use(cookieParser());
-
 
 app.get('/', (req, res) => {
     console.log('Requête GET reçue');
@@ -47,8 +43,8 @@ const server = app.listen(port, () => {
 });
 
 const io = new Server(server, {
-    pingTimeout: 30000, // 30 secondes
-    pingInterval: 25000, // 25 secondes
+    pingTimeout: 30000,
+    pingInterval: 25000,
     cors: {
         origin: "http://localhost:3001",
         methods: ["GET", "POST"],
@@ -56,11 +52,8 @@ const io = new Server(server, {
     }
 });
 
-
 io.on('connection', (socket) => {
-
     console.log('Un client est connecté', socket.id);
-
 
     socket.on('error', (error) => {
         console.error('Erreur WebSocket:', error);
@@ -71,7 +64,6 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
-        // delete userConnected[socket.id]
         console.log("Un client vien de se déconnecté");
     });
 
@@ -79,9 +71,7 @@ io.on('connection', (socket) => {
         console.log("presence : ", data);
         io.emit('multiplayer', data);
         console.log("send");
-    })
-
-    // manageSocketGame(io, socket);
+    });
 
     socket.emit('bienvenue', {message: 'Bienvenue sur le serveur Socket.IO!'});
 });

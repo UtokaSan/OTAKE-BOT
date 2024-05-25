@@ -14,19 +14,21 @@ const getAllCard = async () => {
 const getAllCardWithOneUserId = async (id) => {
     try {
         const response = await axios.get(`http://localhost:3000/card/user/${id}`);
+        await console.log("res : ", response);
         return response.data;
     } catch (error) {
         throw error;
     }
 }
 
-const editCard = async (id, name, rarity, Attack, Life, owner_id) => {
+const editCard = async (id, name, rarity, Attack, Life, Price, owner_id) => {
     try {
         const response = await axios.patch(`http://localhost:3000/card/${id}`, {
             "name": name,
             "rarity": rarity,
             "attack": Attack,
             "pv": Life,
+            "price": Price,
             "owner_id": owner_id
         });
         return response.data;

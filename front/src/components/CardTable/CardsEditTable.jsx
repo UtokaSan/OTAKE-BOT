@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useState } from 'react';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -13,8 +12,6 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Paper from '@mui/material/Paper';
 import { visuallyHidden } from '@mui/utils';
 import "../../styles/components/cardstable.scss";
-import RowCard from "./rowCard.jsx";
-import RowCardEdit from "./rowCardEdit.jsx";
 
 // function descendingComparator(a, b, orderBy) {
 //     if (b[orderBy] < a[orderBy]) return -1;
@@ -133,7 +130,6 @@ export default function CardsTable({rows, _, isConnect}) {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [visibleRows, setVisibleRows] = React.useState([]);
-    const [toggleChange, setToggleChange] = useState(-1);
     console.log("rows : ", rows)
 
     React.useEffect(() => {
@@ -176,67 +172,48 @@ export default function CardsTable({rows, _, isConnect}) {
                         />
                         <TableBody>
                             {visibleRows.map((row, index) => (
-                                <React.Fragment key={row.discord_id}>
-                                    {toggleChange === index ? (
-                                        <>
-                                            <RowCardEdit index={index}
-                                                         card={row}
-                                                         setToggleChange={setToggleChange}
-                                                         isConnect={isConnect}
+                                <TableRow hover key={row.discord_id}>
+                                    <TableCell
+                                        component="th"
+                                        className="table__cell__pseudo"
+                                        id={`enhanced-table-checkbox-${index}`}
+                                        scope="row"
+                                    >
+                                        <div
+                                            className="playerTable__div__container">
+                                            <img
+                                                src={row.image ? row.image : "https://cdn.whatemoji.org/wp-content/uploads/2020/07/Robot-Emoji.png"}
+                                                className={"image__avatar"}
+                                                alt={`Card picture of ${row.name}`}
                                             />
-                                        </>
-                                    ) : (
+                                            <p>{row.name}</p>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell
+                                        align="right">{row.attack}</TableCell>
+                                    <TableCell
+                                        align="right">{row.pv}</TableCell>
+                                    <TableCell
+                                        align="right">{row.price}</TableCell>
+                                    <TableCell align="center"
+                                               className="table-cell-rarity">
+                                        <div
+                                            className={`tag__card tag__card${row.rarity}`}>
+                                            {row.rarity}
+                                        </div>
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        {row.pseudo_owner ? row.pseudo_owner : "not owned"}
+                                    </TableCell>
+                                    {isConnect && (
                                         <>
-                                            <RowCard index={index} cards={row}
-                                                     isConnect={isConnect}
-                                                     setToggleChange={setToggleChange}
-                                            />
-                                            {/*<p>{index}</p>*/}
-                                            {/*<p>rezrze</p>*/}
+                                            <TableCell
+                                                align="right">edit</TableCell>
+                                            <TableCell
+                                                align="right">delete</TableCell>
                                         </>
                                     )}
-                                    <p>
-
-                                    </p>
-
-                                    {/* Uncomment the below code if needed for table rows */}
-                                    {/*
-          <TableRow hover key={row.discord_id}>
-            <TableCell
-              component="th"
-              className="table__cell__pseudo"
-              id={`enhanced-table-checkbox-${index}`}
-              scope="row"
-            >
-              <div className="playerTable__div__container">
-                <img
-                  src={row.image ? row.image : "https://cdn.whatemoji.org/wp-content/uploads/2020/07/Robot-Emoji.png"}
-                  className={"image__avatar"}
-                  alt={`Card picture of ${row.name}`}
-                />
-                <p>{row.name}</p>
-              </div>
-            </TableCell>
-            <TableCell align="right">{row.attack}</TableCell>
-            <TableCell align="right">{row.pv}</TableCell>
-            <TableCell align="right">{row.price}</TableCell>
-            <TableCell align="center" className="table-cell-rarity">
-              <div className={`tag__card tag__card${row.rarity}`}>
-                {row.rarity}
-              </div>
-            </TableCell>
-            <TableCell align="right">
-              {row.pseudo_owner ? row.pseudo_owner : "not owned"}
-            </TableCell>
-            {isConnect && (
-              <>
-                <TableCell align="right">edit</TableCell>
-                <TableCell align="right">delete</TableCell>
-              </>
-            )}
-          </TableRow>
-          */}
-                                </React.Fragment>
+                                </TableRow>
                             ))}
                             {emptyRows > 0 && (
                                 <TableRow style={{height: 53 * emptyRows}}>
@@ -244,7 +221,6 @@ export default function CardsTable({rows, _, isConnect}) {
                                 </TableRow>
                             )}
                         </TableBody>
-
                     </Table>
                 </TableContainer>
                 <TablePagination

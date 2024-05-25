@@ -1,18 +1,22 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 // import img from '../assets/img.png';
 import '../../styles/components/userProfil.scss'
 import CardsTable from "../CardTable/CardsTable.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { editUser } from "../../services/userService.js";
+import Cookies from "js-cookie";
+import axios from "axios";
 
-function UserProfil({user, setToggleChange, id}) {
-
-    console.log(user)
-
+function UserProfil({user, setToggleChange, _}) {
+    // const [isLoading, setIsLoading] = useState(true);
+    const [rows, setRows] = useState([]);
+    const [admin, setAdmin] = useState();
     const [userMoney, setUserMoney] = useState(user.money);
     const [userWin, setUserWin] = useState(user.win);
     const [userLoose, setUserLoose] = useState(user.loose);
+
+    console.log(user)
 
     const ChangeMoneyValue = (event) => {
         setUserMoney(event.target.value);
@@ -33,8 +37,54 @@ function UserProfil({user, setToggleChange, id}) {
         }).catch(err => {
             console.log("error : ", err)
         });
-
     }
+
+    const fetchDataCards = () => {
+        // console.log("user.discord_id : ", user.discord_id);
+
+        // setTimeout(() => {
+        //     const dataCard = getAllCardWithOneUserId(user.discord_id).then(cards => {
+        //         console.log("cards : ", cards);
+        //         cards.map(card => {
+        //             card.pseudo_owner = user.pseudo;
+        //         })
+        //         console.log("cards 2 : ", cards)
+        //
+        //         verifUser().then(() => {
+        //             setRows(cards);
+        //         });
+        //
+        //         // setIsLoading(false);
+        //     });
+        //
+        // }, 2000);
+    }
+
+    useEffect(() => {
+        // console.log("user PP: ", user.discord_id);
+        fetchDataCards();
+    }, []);
+
+    useEffect(() => {
+        console.log("reload : ", rows);
+    }, [rows]);
+
+    const verifUser = async () => {
+        const user = Cookies.get('jwt');
+        if (user) {
+            axios.post("http://localhost:3000/user/isconnect", {jwt: user}).then((response) => {
+                const role = Number.parseInt(response.data.role);
+                if (role === 1) {
+                    setAdmin(true);
+                }
+            }).catch((error) => {
+                console.log(error);
+            });
+        } else {
+            setAdmin(false);
+        }
+    }
+
 
     return (
         <>
@@ -80,7 +130,7 @@ function UserProfil({user, setToggleChange, id}) {
             </div>
             <div id="div_usercomponents__secondrow">
                 <h2 className="underline">You have These cards :</h2>
-                <CardsTable id={id}/>
+                <CardsTable rows={rows} isConnect={admin}/>
             </div>
         </>
     )
