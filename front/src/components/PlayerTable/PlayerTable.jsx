@@ -154,7 +154,9 @@ export default function BasicTable({rows, status, reload}) {
         console.log("user :", user)
 
         if (user) {
+            console.log("AXIOS");
             axios.post("http://localhost:3000/user/isconnect", {jwt: user}).then((response) => {
+                console.log("te Res")
                 const role = Number.parseInt(response.data.role);
                 console.log("role : ", role)
                 if (role === 1) {
@@ -213,6 +215,7 @@ export default function BasicTable({rows, status, reload}) {
 
     useEffect(() => {
         verifUser();
+        console.log(admin);
     }, [])
 
     return (
@@ -221,6 +224,7 @@ export default function BasicTable({rows, status, reload}) {
                 <TableContainer>
                     {admin === undefined ?
                         <p>Loading...</p> :
+
                         <Table sx={{minWidth: 750}} aria-labelledby="tableTitle"
                                size={dense ? 'small' : 'medium'}>
                             <EnhancedTableHead order={order} orderBy={orderBy}

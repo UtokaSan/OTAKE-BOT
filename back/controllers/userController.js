@@ -211,7 +211,11 @@ const isConnect = (req, res) => {
             } else {
                 console.log("user : ", decodedToken);
                 const user = await readUserById(decodedToken.id);
-
+                console.log(user)
+                if (!user) {
+                    console.log("NOT USER");
+                    return;
+                }
                 res.status(200).json({isConnected: true, role: user.role});
             }
         })
