@@ -31,7 +31,6 @@ class Database {
 
         this.client.on('error', (err) => {
             console.error('Database connection error:', err.stack);
-            this.reconnect();
         });
 
         try {
@@ -39,15 +38,8 @@ class Database {
             console.log('Database connected successfully');
         } catch (error) {
             console.error('Failed to connect to the database:', error);
-            this.reconnect();
+            // this.reconnect();
         }
-    }
-
-    async reconnect() {
-        console.log('Reconnecting to the database...');
-        setTimeout(() => {
-            this.connect();
-        }, 5000); // Attendre 5 secondes avant de réessayer
     }
 
     getClient() {

@@ -52,13 +52,18 @@ const deleteUser = async (id) => {
     const client = Database.getInstance().getClient();
     try {
         const results = await client.query(`DELETE FROM "users" WHERE discord_id = $1 RETURNING *`, [id]);
-        console.log('The User has been deleted');
+        console.log("the resultat is  : ", results)
+
+        // console.log('The User has been deleted');
         if (results.rows.length === 0) {
+            console.log("UNDEFINED !!")
             return undefined;
         }
         return results.rows;
     } catch (err) {
         console.error("error executing query:", err);
+        throw err.detail
+        // return
     }
 }
 

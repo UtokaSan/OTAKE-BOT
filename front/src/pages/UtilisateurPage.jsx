@@ -4,7 +4,7 @@ import '../styles/pages/utilisateurPage.scss'
 import { useParams } from "react-router-dom";
 import { getOneUser } from "../services/userService.js";
 import UserProfil from "../components/User/UserProfil.jsx";
-import UserProfilEdit from "../components/User/UserProfilEdit.jsx";
+import UserProfilEditv2 from "../components/User/UserProfilEditv2.jsx";
 
 function UtilisateurPage() {
     const {id} = useParams();
@@ -19,7 +19,7 @@ function UtilisateurPage() {
 
     useEffect(() => {
         getUserData();
-    }, []);
+    }, [user]);
 
 
     return (
@@ -27,18 +27,21 @@ function UtilisateurPage() {
             {user ?
                 <>
                     {toggleChange ?
-                        <UserProfilEdit user={user}
-                                        setToggleChange={setToggleChange}
-                                        id={id}/> :
+                        // <>
+                        //     <p>test</p>
+                        // </>
+                        // <UserProfilEdit user={user}
+                        //                 setToggleChange={setToggleChange}
+                        //     // reload={getUserData()}
+                        <UserProfilEditv2 user={user}
+                                          setToggleChange={setToggleChange}/>
+                        :
                         <UserProfil user={user}
-                                    setToggleChange={setToggleChange} id={id}/>}
+                                    setToggleChange={setToggleChange}/>}
                 </>
                 :
                 <p>Chargement</p>
             }
-
-            <p>test</p>
-
         </div>
     )
 }

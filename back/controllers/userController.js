@@ -106,8 +106,9 @@ const deleteUserById = (req, res) => {
 
     readUserById(id).then((user) => {
         if (user === undefined) res.status(404).send({message: "User not found"});
-        deleteUser(id).then(() => {
-            console.log(`The User ${user.pseudo} ( ${user.id} ) has been deleted`)
+        deleteUser(id).then((rstee) => {
+            // console.log(`The User ${user.pseudo} ( ${user.id} ) has been deleted`)
+            console.log("rstee : ", rstee)
             res.status(200).send(user);
         }).catch((err) => {
             res.status(500).send({message: "The User has not been deleted : " + err});
@@ -197,6 +198,8 @@ const isConnect = (req, res) => {
 
     const token = tokenCookie ? tokenCookie : tokenReq;
 
+    console.log("tokenReq : ", tokenReq);
+    console.log("tokenCookie : ", tokenCookie);
 
     console.log("token : ", token);
 
@@ -220,7 +223,18 @@ const isConnect = (req, res) => {
 
 const requireAuth = (req, res, next) => {
     // const token = req.body.token;
-    const token = req.cookies.jwt;
+    const cookieToken = req.cookies.jwt;
+    const reqToken = req.body.jwt;
+    console.log("reqToken : ", req.body);
+    console.log("cookieToken : ", cookieToken);
+    console.log("reqToken : ", req.body.jwt);
+
+    const token = cookieToken ? cookieToken : reqToken
+    console.log(token);
+
+
+    if (!token) return
+
 
     console.log(token ? "token : " + token : "no token");
 

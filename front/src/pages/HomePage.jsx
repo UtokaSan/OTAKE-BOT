@@ -50,7 +50,7 @@ function Home() {
     useEffect(() => {
         console.log("get all user");
         getAllUser().then((data) => {
-            console.log(data);
+            console.log("D : ", data);
             for (const row of data) {
                 row.status = "undefined";
             }

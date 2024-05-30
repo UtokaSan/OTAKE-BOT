@@ -12,9 +12,9 @@ import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Paper from '@mui/material/Paper';
 import { visuallyHidden } from '@mui/utils';
-import "../../styles/components/cardstable.scss";
 import RowCard from "./rowCard.jsx";
 import RowCardEdit from "./rowCardEdit.jsx";
+import "../../styles/components/cardstable.scss";
 
 // function descendingComparator(a, b, orderBy) {
 //     if (b[orderBy] < a[orderBy]) return -1;
@@ -127,14 +127,14 @@ EnhancedTableHead.propTypes = {
     orderBy: PropTypes.string.isRequired,
 };
 
-export default function CardsTable({rows, _, isConnect}) {
+export default function CardsTable({rows, isConnect, fetchDataCards}) {
     const [order, setOrder] = React.useState('desc');
     const [orderBy, setOrderBy] = React.useState('rarity');
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [visibleRows, setVisibleRows] = React.useState([]);
     const [toggleChange, setToggleChange] = useState(-1);
-    console.log("rows : ", rows)
+    // console.log("rows : ", rows)
 
     React.useEffect(() => {
         const sortedRows = stableSort(rows, getComparator(order, orderBy)).slice(
@@ -183,6 +183,7 @@ export default function CardsTable({rows, _, isConnect}) {
                                                          card={row}
                                                          setToggleChange={setToggleChange}
                                                          isConnect={isConnect}
+                                                         fetchDataCards={fetchDataCards}
                                             />
                                         </>
                                     ) : (
@@ -190,6 +191,7 @@ export default function CardsTable({rows, _, isConnect}) {
                                             <RowCard index={index} cards={row}
                                                      isConnect={isConnect}
                                                      setToggleChange={setToggleChange}
+                                                     fetchDataCards={fetchDataCards}
                                             />
                                             {/*<p>{index}</p>*/}
                                             {/*<p>rezrze</p>*/}

@@ -2,26 +2,22 @@ import React from 'react'
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { deleteCard } from "../../services/cardService.js";
 // import img from '../assets/img.png';
 // import '../styles/style.css'
 
-function RowCard({index, cards, isConnect, setToggleChange}) {
+function RowCard({index, cards, isConnect, setToggleChange, fetchDataCards}) {
 
-    // const removeItem = async (id, cards) => {
-    //     await deleteCard(id);
-    //
-    //     const cardsData = await getAllCard();
-    //     // reload(cardsData);
-    //     setToggleChange(-1);
-    //     console.log(cards);
-    // }
+    const removeItem = async (id) => {
+        await deleteCard(id);
+        console.log("deleted")
+        fetchDataCards();
+    }
 
-
-    // console.log(card)
 
     return (
-        <TableRow hover key={cards.discord_id}>
+        <TableRow hover>
             <TableCell
                 component="th"
                 className="table__cell__pseudo"
@@ -72,7 +68,16 @@ function RowCard({index, cards, isConnect, setToggleChange}) {
                         </button>
                     </TableCell>
                     <TableCell
-                        align="right">delete</TableCell>
+                        align="right">
+                        <button className="button__deletecard"
+                                onClick={() => removeItem(cards.id)}
+                                style={{
+                                    background: 'none',
+                                    border: 'none'
+                                }}>
+                            <FontAwesomeIcon icon={faTrash}/>
+                        </button>
+                    </TableCell>
                 </>
             )}
         </TableRow>

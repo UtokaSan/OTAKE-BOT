@@ -5,7 +5,7 @@ import { deleteCard, editCard } from "../../services/cardService.js";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 
-function RowCard({card, index, setToggleChange}) {
+function RowCard({card, index, setToggleChange, fetchDataCards}) {
     const [cardName, setCardName] = useState(card.name);
     const [cardRarity, setCardRarity] = useState(card.rarity);
     const [cardAttack, setCardAttack] = useState(card.attack);
@@ -15,8 +15,8 @@ function RowCard({card, index, setToggleChange}) {
 
     const removeItem = async (id) => {
         await deleteCard(id);
-        // const cardsData = await getAllCard();
-        // reload(cardsData);
+        console.log("deleted");
+        fetchDataCards();
     }
 
     const ChangeNameValue = (event) => {
@@ -46,7 +46,7 @@ function RowCard({card, index, setToggleChange}) {
     const handleBlur = () => {
         editCard(card.id, cardName, cardRarity, cardAttack, cardLife, cardPrice, cardOwner).then(rst => {
             console.log("rst : ", rst);
-            // reload();
+            fetchDataCards();
         }).catch(err => {
             console.log("error : ", err)
         });
@@ -118,17 +118,6 @@ function RowCard({card, index, setToggleChange}) {
             </TableCell>
             <TableCell
                 align="right">
-                <button className="button__deletecard"
-                        onClick={() => removeItem(card.id)}
-                        style={{
-                            background: 'none',
-                            border: 'none'
-                        }}>
-                    <FontAwesomeIcon icon={faTrash}/>
-                </button>
-            </TableCell>
-            <TableCell
-                align="right">
                 <button className="button__editcard"
                         onClick={() => setToggleChange(-1)}
                         style={{
@@ -139,6 +128,18 @@ function RowCard({card, index, setToggleChange}) {
                         icon={faPenToSquare}/>
                 </button>
             </TableCell>
+            <TableCell
+                align="right">
+                <button className="button__deletecard"
+                        onClick={() => removeItem(card.id)}
+                        style={{
+                            background: 'none',
+                            border: 'none'
+                        }}>
+                    <FontAwesomeIcon icon={faTrash}/>
+                </button>
+            </TableCell>
+
         </TableRow>
     )
 }

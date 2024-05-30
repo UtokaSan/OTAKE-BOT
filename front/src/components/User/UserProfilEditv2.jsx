@@ -3,18 +3,40 @@ import React, { useEffect, useState } from 'react'
 import '../../styles/components/userProfil.scss'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { getAllCardWithOneUserId } from "../../services/cardService.js";
+import { editUser } from "../../services/userService.js";
 import Cookies from "js-cookie";
 import axios from "axios";
-import { getAllCardWithOneUserId } from "../../services/cardService.js";
 import CardsTable from "../CardTable/CardsTable.jsx";
 
-
 function UserProfil({user, setToggleChange}) {
-    const [isLoading, setIsLoading] = useState(true);
+    // const [isLoading, setIsLoading] = useState(true);
+
     const [rows, setRows] = useState([]);
     const [admin, setAdmin] = useState();
-    // console.log("user : ", user);
 
+    const [userMoney, setUserMoney] = useState(user.money);
+    const [userWin, setUserWin] = useState(user.win);
+    const [userLoose, setUserLoose] = useState(user.loose);
+
+    const ChangeMoneyValue = (event) => {
+        setUserMoney(event.target.value);
+    }
+    const ChangeWinValue = (event) => {
+        setUserWin(event.target.value);
+    }
+    const ChangeLooseValue = (event) => {
+        setUserLoose(event.target.value);
+    }
+
+    const blurUpdateUser = () => {
+        console.log("Blur");
+        editUser(user.discord_id, {userMoney, userWin, userLoose}).then(rst => {
+            console.log("rst : ", rst);
+        }).catch(err => {
+            console.log("error : ", err)
+        });
+    }
 
     const fetchDataCards = () => {
         console.log("user.discord_id : ", user.discord_id);
@@ -56,6 +78,7 @@ function UserProfil({user, setToggleChange}) {
         }
     }
 
+
     return (
         <>
             <div id="div_usercomponents__firstrow">
@@ -75,12 +98,27 @@ function UserProfil({user, setToggleChange}) {
                                 icon={faPenToSquare}/>
                         </button>
                     </h2>
-                    <p>He has {user.money}💰</p>
+                    <p>He has
+                        <input type="text" value={userMoney}
+                               onChange={ChangeMoneyValue}
+                               onBlur={blurUpdateUser}
+                        />💰
+                    </p>
                     <p>He has also played : {+user.win + +user.loose} games -
                         win
-                        : {+user.win} and
+                        :
+                        <input type="text" value={userWin}
+                               onChange={ChangeWinValue}
+                               onBlur={blurUpdateUser}
+                        />
+                        and
                         loose
-                        : {+user.loose}</p>
+                        :
+                        <input type="text" value={userLoose}
+                               onChange={ChangeLooseValue}
+                               onBlur={blurUpdateUser}
+                        />
+                    </p>
                 </div>
             </div>
 
@@ -89,8 +127,7 @@ function UserProfil({user, setToggleChange}) {
                 {rows.length === 0 && admin ? "Loading ..."
                     :
                     <>
-                        <CardsTable rows={rows} isConnect={admin}
-                                    fetchDataCards={fetchDataCards}/>
+                        <CardsTable rows={rows} isConnect={admin}/>
                     </>
                 }
 

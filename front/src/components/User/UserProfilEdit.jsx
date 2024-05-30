@@ -1,15 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 // import img from '../assets/img.png';
 import '../../styles/components/userProfil.scss'
-import CardsTable from "../CardTable/CardsTable.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
-import { editUser } from "../../services/userService.js";
-import Cookies from "js-cookie";
-import axios from "axios";
 
-function UserProfil({user, setToggleChange, _}) {
-    // const [isLoading, setIsLoading] = useState(true);
+function UserProfil({user, setToggleChange}) { // reload
     const [rows, setRows] = useState([]);
     const [admin, setAdmin] = useState();
     const [userMoney, setUserMoney] = useState(user.money);
@@ -39,51 +34,40 @@ function UserProfil({user, setToggleChange, _}) {
         });
     }
 
-    const fetchDataCards = () => {
-        // console.log("user.discord_id : ", user.discord_id);
-
-        // setTimeout(() => {
-        //     const dataCard = getAllCardWithOneUserId(user.discord_id).then(cards => {
-        //         console.log("cards : ", cards);
-        //         cards.map(card => {
-        //             card.pseudo_owner = user.pseudo;
-        //         })
-        //         console.log("cards 2 : ", cards)
-        //
-        //         verifUser().then(() => {
-        //             setRows(cards);
-        //         });
-        //
-        //         // setIsLoading(false);
-        //     });
-        //
-        // }, 2000);
-    }
-
-    useEffect(() => {
-        // console.log("user PP: ", user.discord_id);
-        fetchDataCards();
-    }, []);
-
-    useEffect(() => {
-        console.log("reload : ", rows);
-    }, [rows]);
-
-    const verifUser = async () => {
-        const user = Cookies.get('jwt');
-        if (user) {
-            axios.post("http://localhost:3000/user/isconnect", {jwt: user}).then((response) => {
-                const role = Number.parseInt(response.data.role);
-                if (role === 1) {
-                    setAdmin(true);
-                }
-            }).catch((error) => {
-                console.log(error);
-            });
-        } else {
-            setAdmin(false);
-        }
-    }
+    // const fetchDataCards = () => {
+    //     console.log("user.discord_id : ", user.discord_id);
+    //
+    //     setTimeout(() => {
+    //         const dataCard = getAllCardWithOneUserId(user.discord_id).then(cards => {
+    //             console.log("cards : ", cards);
+    //             cards.map(card => {
+    //                 card.pseudo_owner = user.pseudo;
+    //             })
+    //             console.log("cards 2 : ", cards)
+    //
+    //             verifUser().then(() => {
+    //                 setRows(cards);
+    //             });
+    //         });
+    //
+    //     }, 2000);
+    // }
+    //
+    // const verifUser = async () => {
+    //     const user = Cookies.get('jwt');
+    //     if (user) {
+    //         axios.post("http://localhost:3000/user/isconnect", {jwt: user}).then((response) => {
+    //             const role = Number.parseInt(response.data.role);
+    //             if (role === 1) {
+    //                 setAdmin(true);
+    //             }
+    //         }).catch((error) => {
+    //             console.log(error);
+    //         });
+    //     } else {
+    //         setAdmin(false);
+    //     }
+    // }
 
 
     return (
@@ -96,7 +80,11 @@ function UserProfil({user, setToggleChange, _}) {
                 <div id="container_userinformation">
                     <h2>{user.pseudo}
                         <button className="button__editcard"
-                                onClick={() => setToggleChange(change => !change)}
+                                onClick={() => {
+                                    setToggleChange(change => !change)
+                                }}
+                            // await reload;
+                            // await console.log("reload")
                                 style={{
                                     background: 'none',
                                     border: 'none'
@@ -124,13 +112,13 @@ function UserProfil({user, setToggleChange, _}) {
                         : <input type="text"
                                  onChange={ChangeLooseValue}
                                  value={userLoose}
-                                 onBlur={handleBlur} // to save when it loses focus
+                            // onBlur={handleBlur} // to save when it loses focus
                                  size={userLoose.toString().length}/></p>
                 </div>
             </div>
             <div id="div_usercomponents__secondrow">
                 <h2 className="underline">You have These cards :</h2>
-                <CardsTable rows={rows} isConnect={admin}/>
+                {/*<CardsTable rows={rows} isConnect={admin}/>*/}
             </div>
         </>
     )

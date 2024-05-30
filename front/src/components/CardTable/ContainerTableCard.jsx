@@ -56,7 +56,8 @@ function ContainerTableCard() {
             <br/>
             {
                 isLoading ? <div>Chargement ...</div>
-                    : <CardsTable rows={rows} isConnect={admin}/>
+                    : <CardsTable rows={rows} isConnect={admin}
+                                  fetchDataCards={fetchDataCards}/>
             }
         </div>
     );
