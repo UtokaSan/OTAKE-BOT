@@ -1,6 +1,8 @@
 CREATE TABLE users (
                        discord_id VARCHAR(50) NOT NULL UNIQUE,
                        pseudo VARCHAR(50) NOT NULL,
+                       password VARCHAR(255),
+                       role VARCHAR(8),
                        avatar VARCHAR(255) NOT NULL,
                        money INT NOT NULL,
                        win INT NOT NULL DEFAULT 0,

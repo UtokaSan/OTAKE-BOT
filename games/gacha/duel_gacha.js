@@ -1,5 +1,8 @@
-const {EmbedBuilder, ButtonBuilder, ActionRowBuilder, StringSelectMenuBuilder} = require("discord.js");
+const {EmbedBuilder, ButtonBuilder, ActionRowBuilder, StringSelectMenuBuilder, ModalBuilder, TextInputBuilder} = require("discord.js");
 const { ChannelType } = require('discord.js');
+const {pgClient} = require("../../database/database_config");
+const { Card } = require('./class/Card.js');
+const { DuelGame } = require('./class/DuelGame.js');
 
 async function executeDuelGacha(interaction, client) {
     try {
@@ -17,6 +20,14 @@ async function executeDuelGacha(interaction, client) {
         const existingDuel = memberduel.find((element) => (element.player1 === userId && element.player2 === opponent.id) || (element.player1 === opponent.id && element.player2 === userId));
         if (existingDuel) {
             await interaction.reply("You already have a duel with this user");
+            return;
+        }
+        if (userId === opponent.id) {
+            await interaction.reply("You can't duel yourself");
+            return;
+        }
+        if (member.user.bot) {
+            await interaction.reply("You can't duel a bot");
             return;
         }
         if (member.presence?.status === "online" || member.presence?.status === "idle" || member.presence?.status === "dnd") {
@@ -50,38 +61,62 @@ async function executeDuelGacha(interaction, client) {
 async function acceptDuel(opponent,interaction, player1) {
     const thread = await createThread(interaction, opponent, player1);
     await thread.send(`Welcome to the duel between <@${player1}> and <@${opponent.id}>!`);
-    await thread.send("First player choose a card");
-    await createListCard(interaction, player1, thread);
+    await duel(interaction, thread, player1, opponent.id);
 }
 
-async function createListCard(interaction, userId, thread) {
-    const embed = new EmbedBuilder()
-        .setTitle("List of your cards")
-        .setDescription("Select a card to play")
-        .setColor("Red");
+async function createListCard(interaction, userId, thread, player, gameEnded) {
 
-    const row = new ActionRowBuilder()
-        .addComponents(
-            new StringSelectMenuBuilder()
-                .setCustomId("select_card")
-                .setPlaceholder("Select a card")
-                .addOptions([
-                    {
-                        label: "Card 1",
-                        value: "card1"
-                    },
-                    {
-                        label: "Card 2",
-                        value: "card2"
-                    },
-                    {
-                        label: "Card 3",
-                        value: "card3"
-                    }
-                ])
-        );
+    console.log("Function work");
+    const user = await interaction.client.users.fetch(userId);
+    const filter = m => m.author.id === user.id;
+    let validCard = false;
 
-    thread.send({ embeds: [embed], components: [row] });
+    while (!validCard && !gameEnded) {
+        const collector = thread.createMessageCollector({ filter, max: 1, time: 30000 });
+
+        const collected = await new Promise((resolve) => {
+            collector.on('end', (collected) => resolve(collected));
+        });
+
+        if (collected.size === 0) {
+            await thread.send(`${player} did not choose a card in time !`);
+            return;
+        } else {
+            const cardChoice = collected.first().content;
+            console.log(cardChoice);
+            const cardsDB = await pgClient.query("SELECT * from cards WHERE id = $1", [cardChoice]);
+            if (cardsDB.rows.length > 0) {
+                const card = cardsDB.rows[0];
+                console.log(card.owner_id, userId)
+                if(card.owner_id === userId) {
+                    await thread.send(`${player} has chosen the card : ${cardChoice}`);
+                    validCard = true;
+                    return cardsDB;
+                } else {
+                    await thread.send(`${player} did not choose a card that belongs to them !`);
+                }
+            } else {
+                await thread.send(`La carte "${cardChoice}" does not exist. Please choose another card.`);
+            }
+        }
+    }
+}
+
+async function duel(interaction, thread, player1, player2) {
+    let gameEnded = false;
+    thread.send("first player must choose a card");
+    const player1CardData = await createListCard(interaction, player1, thread, "player1", gameEnded);
+    thread.send("opponent must choose a card");
+    const player2CardData = await createListCard(interaction, player2, thread, "player2", gameEnded);
+    if (!player1CardData || !player2CardData) {
+        return;
+    }
+    const card1 = new Card(player1CardData.rows[0].name, player1CardData.rows[0].attack, player1CardData.rows[0].defense, player1CardData.rows[0].pv, 0.8);
+    const card2 = new Card(player2CardData.rows[0].name, player2CardData.rows[0].attack, player2CardData.rows[0].defense, player2CardData.rows[0].pv, 0.8);
+    const game = new DuelGame(card1, card2);
+    game.play(thread, (isGameEnded) => {
+        gameEnded = isGameEnded;
+    });
 }
 
 async function createThread(interaction, opponent, player1) {
