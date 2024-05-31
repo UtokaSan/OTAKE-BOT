@@ -71,7 +71,7 @@ const createCardController = (req, res) => {
 const updateCardController = (req, res) => {
     const id = req.params.id;
     console.log("card : ", req.body);
-    
+
     if (req.body === undefined) {
         res.status(400).send({message: "Missing fields"});
         return;

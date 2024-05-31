@@ -54,7 +54,8 @@ const getOneUserById = async (req, res) => {
 const editUserController = async (req, res) => {
     const id = req.params.id;
 
-    console.log("req body : ", req.body)
+    console.log("Ta mere");
+    console.log(req.body)
     // console.log("role : ", req.body.role)
     // console.log("YES")
 
@@ -69,6 +70,9 @@ const editUserController = async (req, res) => {
     if (req.body.role) changeValue.push(`role='${req.body.role}'`);
 
     const paramsToChange = changeValue.join(', ');
+
+    console.log("changeValue : ", changeValue);
+
     try {
         updateUser(id, paramsToChange).then((rst) => {
             console.log(rst);
