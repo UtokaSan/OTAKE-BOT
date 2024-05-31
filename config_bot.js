@@ -42,12 +42,10 @@ client.on(Events.InteractionCreate, async interaction => {
 });
 client.on('ready', async (client) => {
     await addAllUserInDb(client);
-    await addAllCooldownUserInDb(client);
 });
 
 client.on('guildMemberAdd', async (member) => {
     await addUserInDb(member, client);
-    await addCooldownUserInDb(member);
 })
 
 client.login(token);

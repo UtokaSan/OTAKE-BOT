@@ -1,4 +1,5 @@
 const {pgClient} = require("../database_config");
+const {addCooldownUserInDb, addAllCooldownUserInDb} = require("./cooldown_model");
 
 
 async function addUserInDb(member, client) {
@@ -12,6 +13,7 @@ async function addUserInDb(member, client) {
         const queryText = 'INSERT INTO users (discord_id, avatar, money, pseudo, elo) VALUES ($1, $2, $3, $4, $5)';
         const values = [userId, avatar, 0, pseudo, 0];
         await pgClient.query(queryText, values);
+        await addCooldownUserInDb(member);
     } catch (err) {
         console.log(err);
     }
@@ -34,6 +36,8 @@ async function addAllUserInDb(client) {
                     }
                 }
             }
+            await addAllCooldownUserInDb(client);
+            console.log('Cooldown added in db')
         } catch (error) {
             console.error('Error fetching guild members:', error);
         }
