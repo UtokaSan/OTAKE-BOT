@@ -1,5 +1,4 @@
 {
-<<<<<<< Updated upstream
   "name": "otake-bot",
   "version": "1.0.0",
   "description": "",
@@ -11,12 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.19.2",
-=======
-  "dependencies": {
-    "anime-character-random": "^1.0.14",
+    "@mateoaranda/jikanjs": "^1.2.4",
     "discord.js": "^14.14.1",
->>>>>>> Stashed changes
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "pagination.djs": "^4.0.14",
+    "pg": "^8.11.5"
   }
 }
