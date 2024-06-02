@@ -11,6 +11,7 @@ function navBar() {
                 <menu id="navbar__menu">
                     <Link to="/users">Users</Link>
                     <Link to="/cards">Cards</Link>
+                    <Link to="/login">Login</Link>
                 </menu>
             </nav>
         </>

@@ -1,18 +1,17 @@
 import React, { useState } from 'react'
 // import img from '../assets/img.png';
 import '../../styles/components/userProfil.scss'
-import CardsTable from "../CardTable/cardsTable.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
-import { editUser } from "../../services/userService.js";
 
-function UserProfil({user, setToggleChange, id}) {
-
-    console.log(user)
-
+function UserProfil({user, setToggleChange}) { // reload
+    const [rows, setRows] = useState([]);
+    const [admin, setAdmin] = useState();
     const [userMoney, setUserMoney] = useState(user.money);
     const [userWin, setUserWin] = useState(user.win);
     const [userLoose, setUserLoose] = useState(user.loose);
+
+    console.log(user)
 
     const ChangeMoneyValue = (event) => {
         setUserMoney(event.target.value);
@@ -33,8 +32,43 @@ function UserProfil({user, setToggleChange, id}) {
         }).catch(err => {
             console.log("error : ", err)
         });
-
     }
+
+    // const fetchDataCards = () => {
+    //     console.log("user.discord_id : ", user.discord_id);
+    //
+    //     setTimeout(() => {
+    //         const dataCard = getAllCardWithOneUserId(user.discord_id).then(cards => {
+    //             console.log("cards : ", cards);
+    //             cards.map(card => {
+    //                 card.pseudo_owner = user.pseudo;
+    //             })
+    //             console.log("cards 2 : ", cards)
+    //
+    //             verifUser().then(() => {
+    //                 setRows(cards);
+    //             });
+    //         });
+    //
+    //     }, 2000);
+    // }
+    //
+    // const verifUser = async () => {
+    //     const user = Cookies.get('jwt');
+    //     if (user) {
+    //         axios.post("http://localhost:3000/user/isconnect", {jwt: user}).then((response) => {
+    //             const role = Number.parseInt(response.data.role);
+    //             if (role === 1) {
+    //                 setAdmin(true);
+    //             }
+    //         }).catch((error) => {
+    //             console.log(error);
+    //         });
+    //     } else {
+    //         setAdmin(false);
+    //     }
+    // }
+
 
     return (
         <>
@@ -46,7 +80,11 @@ function UserProfil({user, setToggleChange, id}) {
                 <div id="container_userinformation">
                     <h2>{user.pseudo}
                         <button className="button__editcard"
-                                onClick={() => setToggleChange(change => !change)}
+                                onClick={() => {
+                                    setToggleChange(change => !change)
+                                }}
+                            // await reload;
+                            // await console.log("reload")
                                 style={{
                                     background: 'none',
                                     border: 'none'
@@ -61,7 +99,7 @@ function UserProfil({user, setToggleChange, id}) {
                                      onBlur={handleBlur} // to save when it loses focus
                                      size={userMoney.length}/>💰</p>
                     <p>He has also played : {+user.win + +user.loose} games
-                        =>
+                        -
                         win
                         :
                         <input type="text"
@@ -74,13 +112,13 @@ function UserProfil({user, setToggleChange, id}) {
                         : <input type="text"
                                  onChange={ChangeLooseValue}
                                  value={userLoose}
-                                 onBlur={handleBlur} // to save when it loses focus
+                            // onBlur={handleBlur} // to save when it loses focus
                                  size={userLoose.toString().length}/></p>
                 </div>
             </div>
             <div id="div_usercomponents__secondrow">
                 <h2 className="underline">You have These cards :</h2>
-                <CardsTable id={id}/>
+                {/*<CardsTable rows={rows} isConnect={admin}/>*/}
             </div>
         </>
     )

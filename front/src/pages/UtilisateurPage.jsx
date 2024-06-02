@@ -1,46 +1,47 @@
 import React, { useEffect, useState } from 'react'
 // import img from '../assets/img.png';
 import '../styles/pages/utilisateurPage.scss'
-import UserProfil from "../components/User/UserProfil.jsx";
 import { useParams } from "react-router-dom";
-import UserProfilEdit from "../components/User/UserProfilEdit.jsx";
 import { getOneUser } from "../services/userService.js";
+import UserProfil from "../components/User/UserProfil.jsx";
+import UserProfilEditv2 from "../components/User/UserProfilEditv2.jsx";
 
 function UtilisateurPage() {
     const {id} = useParams();
     const [toggleChange, setToggleChange] = useState(false)
     const [user, setUser] = useState();
-
-    useEffect(() => {
-        console.log("test")
-        getUserData()
-    }, [])
+    // const [isLoading, setIsLoading] = useState(true)
 
     const getUserData = async () => {
         const user = await getOneUser(id);
-        console.log(user)
         await setUser(user)
     }
 
+    useEffect(() => {
+        getUserData();
+    }, [user]);
+
+
     return (
         <div id="utilisateurPage">
-            {/*<form action="">*/}
             {user ?
                 <>
                     {toggleChange ?
-                        <UserProfilEdit user={user}
-                                        setToggleChange={setToggleChange}
-                                        id={id}/> :
+                        // <>
+                        //     <p>test</p>
+                        // </>
+                        // <UserProfilEdit user={user}
+                        //                 setToggleChange={setToggleChange}
+                        //     // reload={getUserData()}
+                        <UserProfilEditv2 user={user}
+                                          setToggleChange={setToggleChange}/>
+                        :
                         <UserProfil user={user}
-                                    setToggleChange={setToggleChange} id={id}/>}
-                    {/*</form>*/}
+                                    setToggleChange={setToggleChange}/>}
                 </>
                 :
                 <p>Chargement</p>
-
             }
-
-
         </div>
     )
 }
